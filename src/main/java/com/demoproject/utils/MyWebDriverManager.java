@@ -6,32 +6,46 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 public class MyWebDriverManager {
-    private static WebDriver driver;
+
+    private WebDriver driver;
+    private static MyWebDriverManager instance;
+
+    private MyWebDriverManager() {}
+
+    public static synchronized MyWebDriverManager getInstance() {
+        if (instance == null) {
+            instance = new MyWebDriverManager();
+        }
+        return instance;
+    }
 
 
-    public static WebDriver getDriver() {
+    public WebDriver getDriver() {
         if (driver == null) {
-            String browser = ConfigReader.getProperty("browser");
-
-            switch (browser.toLowerCase()) {
-                case "chrome":
-                    WebDriverManager.chromedriver().setup();
-                    driver = new ChromeDriver();
-                    break;
-                case "firefox":
-                    WebDriverManager.firefoxdriver().setup();
-                    driver = new FirefoxDriver();
-                    break;
-                default:
-                    throw new IllegalArgumentException("Unsupported browser: " + browser);
-            }
-            driver.manage().window().maximize();
+            initDriver();
         }
         return driver;
     }
 
+    private void initDriver() {
+        String browser = ConfigReader.getProperty("browser");
 
-    public static void quitDriver() {
+        switch (browser.toLowerCase()) {
+            case "chrome":
+                WebDriverManager.chromedriver().setup();
+                driver = new ChromeDriver();
+                break;
+            case "firefox":
+                WebDriverManager.firefoxdriver().setup();
+                driver = new FirefoxDriver();
+                break;
+            default:
+                throw new IllegalArgumentException("Unsupported browser: " + browser);
+        }
+        driver.manage().window().maximize();
+    }
+
+    public void quitDriver() {
         if (driver != null) {
             driver.quit();
             driver = null;

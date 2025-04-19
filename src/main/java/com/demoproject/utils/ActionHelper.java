@@ -6,6 +6,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
+import java.util.Objects;
 
 public final class ActionHelper {
 
@@ -56,6 +57,14 @@ public final class ActionHelper {
         getWait().until(ExpectedConditions.presenceOfElementLocated(locator));
     }
 
+    public static void waitForPageLoad() {
+        getWait().until(driver ->
+                Objects.equals(((JavascriptExecutor) driver).executeScript("return document.readyState"), "complete"));
+    }
+
+    public static void waitForUrlToContain(String text) {
+        getWait().until(ExpectedConditions.urlContains(text));
+    }
 
     public static String getText(By locator) {
         WebElement element = getWait().until(ExpectedConditions.visibilityOfElementLocated(locator));
