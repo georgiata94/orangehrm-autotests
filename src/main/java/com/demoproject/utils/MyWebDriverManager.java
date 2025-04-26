@@ -7,48 +7,40 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 
 public class MyWebDriverManager {
 
-    private WebDriver driver;
-    private static MyWebDriverManager instance;
 
-    private MyWebDriverManager() {}
-
-    public static synchronized MyWebDriverManager getInstance() {
-        if (instance == null) {
-            instance = new MyWebDriverManager();
-        }
-        return instance;
-    }
+    private static final ThreadLocal<WebDriver> driverThreadLocal = new ThreadLocal<>();
 
 
-    public WebDriver getDriver() {
-        if (driver == null) {
+    public static WebDriver getDriver() {
+        if (driverThreadLocal.get() == null) {
             initDriver();
         }
-        return driver;
+        return driverThreadLocal.get();
     }
 
-    private void initDriver() {
+    private static void initDriver() {
         String browser = ConfigReader.getProperty("browser");
 
         switch (browser.toLowerCase()) {
             case "chrome":
                 WebDriverManager.chromedriver().setup();
-                driver = new ChromeDriver();
+                driverThreadLocal.set(new ChromeDriver());
                 break;
             case "firefox":
                 WebDriverManager.firefoxdriver().setup();
-                driver = new FirefoxDriver();
+                driverThreadLocal.set(new FirefoxDriver());
                 break;
             default:
                 throw new IllegalArgumentException("Unsupported browser: " + browser);
         }
-        driver.manage().window().maximize();
+
+        getDriver().manage().window().maximize();
     }
 
-    public void quitDriver() {
-        if (driver != null) {
-            driver.quit();
-            driver = null;
+    public static void quitDriver() {
+        if (driverThreadLocal.get() != null) {
+            driverThreadLocal.get().quit();
+            driverThreadLocal.remove(); // важно!
         }
     }
 }

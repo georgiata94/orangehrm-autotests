@@ -1,5 +1,7 @@
 package com.demoproject.utils;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -11,6 +13,7 @@ import java.util.Objects;
 public final class ActionHelper {
 
     private static final ThreadLocal<WebDriver> driverThreadLocal = new ThreadLocal<>();
+    private static final Logger logger = LogManager.getLogger(ActionHelper.class);
 
     private ActionHelper() {}
 
@@ -33,6 +36,9 @@ public final class ActionHelper {
         element.click();
     }
 
+    public static WebElement findElement(By locator) {
+        return getWait().until(ExpectedConditions.visibilityOfElementLocated(locator));
+    }
 
     public static void type(By locator, String text) {
         WebElement element = getWait().until(ExpectedConditions.visibilityOfElementLocated(locator));
@@ -104,4 +110,27 @@ public final class ActionHelper {
     public static void waitForCheckboxToBeDisabled(By locator) {
         getWait().until(d -> !d.findElement(locator).isEnabled());
     }
+
+    public static void setCheckbox(By locator, boolean shouldBeChecked) {
+        WebElement checkbox = getWait().until(ExpectedConditions.elementToBeClickable(locator));
+        boolean isChecked = checkbox.isSelected();
+
+        if (isChecked != shouldBeChecked) {
+            checkbox.click();
+            logger.info("Checkbox at {} set to {}", locator, shouldBeChecked ? "checked" : "unchecked");
+        } else {
+            logger.info("Checkbox at {} already in desired state: {}", locator, shouldBeChecked ? "checked" : "unchecked");
+        }
+    }
+
+    public enum CheckboxState {
+        ENABLE,
+        DISABLE
+    }
+
+    public static boolean isCurrentUrlContains(String expectedPartialUrl) {
+        String currentUrl = Objects.requireNonNull(getDriver().getCurrentUrl());
+        return currentUrl.contains(expectedPartialUrl);
+    }
+
 }

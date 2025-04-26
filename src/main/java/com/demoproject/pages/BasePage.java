@@ -40,12 +40,10 @@ public class BasePage {
     private static final By navBarButton = By.xpath("//button//i[@class='oxd-icon bi-chevron-left']");
     private static final By navBarSearchButton = By.xpath("//button//i[@class='oxd-icon bi-chevron-left']");
 
-
     private void clickTab(By locator, WebDriver driver) {
         ActionHelper.setDriver(driver);
         ActionHelper.click(locator);
     }
-
 
     public LoginPage clickLogout() {
         ActionHelper.setDriver(driver);
@@ -72,109 +70,61 @@ public class BasePage {
 
     public Dashboard getDashboard(WebDriver driver) {
         clickTab(dashboardTab, driver);
-        return new Dashboard();
-    }
-
-    public Dashboard getDashboard() {
-        return new Dashboard();
-    }
-
-    public Admin getAdmin(WebDriver driver) {
-        clickTab(adminTab, driver);
-        return new Admin();
+        return new Dashboard(driver);
     }
 
     public Admin getAdmin() {
+        clickTab(adminTab, driver);
         return new Admin();
     }
 
     public Buzz getBuzz(WebDriver driver) {
         clickTab(buzzTab, driver);
-        return new Buzz();
-    }
-
-    public Buzz getBuzz() {
-        return new Buzz();
+        return new Buzz(driver);
     }
 
     public Claim getClaim(WebDriver driver) {
         clickTab(claimTab, driver);
-        return new Claim();
-    }
-
-    public Claim getClaim() {
-        return new Claim();
+        return new Claim(driver);
     }
 
     public Directory getDirectory(WebDriver driver) {
         clickTab(directoryTab, driver);
-        return new Directory();
-    }
-
-    public Directory getDirectory() {
-        return new Directory();
+        return new Directory(driver);
     }
 
     public Leave getLeave(WebDriver driver) {
         clickTab(leaveTab, driver);
-        return new Leave();
-    }
-
-    public Leave getLeave() {
-        return new Leave();
+        return new Leave(driver);
     }
 
     public Maintenance getMaintenance(WebDriver driver) {
         clickTab(maintenanceTab, driver);
-        return new Maintenance();
-    }
-
-    public Maintenance getMaintenance() {
-        return new Maintenance();
+        return new Maintenance(driver);
     }
 
     public MyInfo getMyInfo(WebDriver driver) {
         clickTab(myInfoTab, driver);
-        return new MyInfo();
-    }
-
-    public MyInfo getMyInfo() {
-        return new MyInfo();
+        return new MyInfo(driver);
     }
 
     public Performance getPerformance(WebDriver driver) {
         clickTab(performanceTab, driver);
-        return new Performance();
-    }
-
-    public Performance getPerformance() {
-        return new Performance();
+        return new Performance(driver);
     }
 
     public PIM getPIM(WebDriver driver) {
         clickTab(pimTab, driver);
-        return new PIM();
-    }
-
-    public PIM getPIM() {
-        return new PIM();
+        return new PIM(driver);
     }
 
     public Recruitment getRecruitment(WebDriver driver) {
         clickTab(recruitmentTab, driver);
-        return new Recruitment();
-    }
-
-    public Recruitment getRecruitment() {
-        return new Recruitment();
+        return new Recruitment(driver);
     }
 
     public Time getTime(WebDriver driver) {
         clickTab(timeTab, driver);
-        return new Time();
-    }
-
-    public Time getTime() {
-        return new Time();
+        return new Time(driver);
     }
 }

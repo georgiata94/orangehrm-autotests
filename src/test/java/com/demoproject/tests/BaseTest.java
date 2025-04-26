@@ -15,8 +15,7 @@ public abstract class BaseTest {
 
     @BeforeMethod
     public void setUp() {
-        MyWebDriverManager manager = MyWebDriverManager.getInstance();
-        driver = manager.getDriver();
+        driver = MyWebDriverManager.getDriver();
         ActionHelper.setDriver(driver);
         wait = new WebDriverWait(driver, Duration.ofSeconds(Integer.parseInt(ConfigReader.getProperty("defaultTimeout"))));
     }
@@ -25,7 +24,7 @@ public abstract class BaseTest {
     public void tearDown() {
 
         if (driver != null) {
-            MyWebDriverManager.getInstance().quitDriver();
+            MyWebDriverManager.quitDriver();
         }
     }
 }
