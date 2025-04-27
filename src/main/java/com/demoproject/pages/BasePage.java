@@ -176,16 +176,16 @@ public class BasePage {
         return getPerformance(driver);
     }
 
-    public PIM getPIM(WebDriver driver) {
+    public PIM getPIM() {
         clickTab(pimTab, driver);
-        return new PIM(driver);
+        return new PIM();
     }
 
     public PIM getPIM(WebDriver driver, boolean performNavigation) {
         if (!performNavigation) {
-            return new PIM(driver);
+            return new PIM();
         }
-        return getPIM(driver);
+        return getPIM();
     }
 
     public Recruitment getRecruitment(WebDriver driver) {

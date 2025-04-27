@@ -11,7 +11,7 @@ public class Admin {
 
     protected final Logger logger = LogManager.getLogger(getClass());
 
-    private static final By userManagementButton = By.xpath("//text()[normalize-space()='User Management']/..");
+    private static final By userManagementButton = By.xpath("//text()[normalize-space()='User Management']/ancestor::span[@class='oxd-topbar-body-nav-tab-item']");
     private static final By jobButton = By.xpath("(//text()[normalize-space()='Job']/..)[2]");
     private static final By organizationButton = By.xpath("//text()[normalize-space()='Organization']/..");
     private static final By qualificationsButton = By.xpath("//text()[normalize-space()='Qualifications']/..");

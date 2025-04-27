@@ -40,12 +40,30 @@ public final class ActionHelper {
         return getWait().until(ExpectedConditions.visibilityOfElementLocated(locator));
     }
 
+//    public static void type(By locator, String text) {
+//        WebElement element = getWait().until(ExpectedConditions.visibilityOfElementLocated(locator));
+//        element.clear();
+//        element.sendKeys(text);
+//    }
+
     public static void type(By locator, String text) {
         WebElement element = getWait().until(ExpectedConditions.visibilityOfElementLocated(locator));
-        element.clear();
-        element.sendKeys(text);
-    }
 
+        try {
+            element.clear();
+            element.sendKeys(text);
+            if (!Objects.equals(element.getDomProperty("value"), text)) {
+                throw new Exception("Standard method failed");
+            }
+        } catch (Exception e) {
+            String script = "var elem = arguments[0];" +
+                    "elem.value = '';" +
+                    "elem.dispatchEvent(new Event('change'));" +
+                    "elem.dispatchEvent(new Event('input'));";
+            ((JavascriptExecutor)getDriver()).executeScript(script, element);
+            element.sendKeys(text);
+        }
+    }
 
     public static boolean isVisible(By locator) {
         try {

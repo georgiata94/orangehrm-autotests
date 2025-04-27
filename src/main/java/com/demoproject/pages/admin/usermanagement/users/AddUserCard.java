@@ -59,11 +59,11 @@ public class AddUserCard {
         return this;
     }
 
-    public AddUserCard fillEmployeeName(){
+    public AddUserCard fillEmployeeName(String emplName, String fullName){
         ActionHelper.waitForVisibility(emplNameField);
-        ActionHelper.type(emplNameField,"a");
-        ActionHelper.waitForVisibility(By.xpath("//div[@role='option' and contains(normalize-space(), 'A8DCo 4Ys 010Z')]"));
-        ActionHelper.click(By.xpath("//div[@role='option' and contains(normalize-space(), 'A8DCo 4Ys 010Z')]"));
+        ActionHelper.type(emplNameField,emplName);
+        ActionHelper.waitForVisibility(By.xpath("//div[@role='option']//span[text()='"+fullName+"']"));
+        ActionHelper.click(By.xpath("//div[@role='option']//span[text()='"+fullName+"']"));
         return this;
     }
 
@@ -75,6 +75,7 @@ public class AddUserCard {
     public Users clickSaveButton(){
         ActionHelper.click(saveButton);
         ActionHelper.waitForVisibility(successToast);
+        ActionHelper.waitForPageLoad();
         return new Users();
     }
 }

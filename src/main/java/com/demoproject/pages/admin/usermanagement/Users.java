@@ -17,13 +17,14 @@ public class Users {
     private static final By recordsFoundText = By.xpath("//div[@class='orangehrm-horizontal-padding orangehrm-vertical-padding']//span");
     private static final By addBtn = By.xpath("//text()[contains(., 'Add')]/ancestor::button");
     private static final By checkBoxAll = By.xpath("//*[text()='Username']/preceding-sibling::div//input[@type='checkbox']");
-    private static final String userActionsXpath = "//div[text()='%s']/../following-sibling::div//i";
+    private static final String userActionsXpath = "(//div[text()='%s']/../following-sibling::div//i)";
     private static final By confirmDeleteBtn = By.xpath("//div[@class='orangehrm-modal-footer']//button//i");
     private static final By successToast = By.xpath("//div[@class='oxd-toast-start']");
     private static final By editUserTitle = By.xpath("//h6[text()='Edit User']");
     private static final By deleteSelectedButton = By.xpath("//i[@class='oxd-icon bi-trash-fill oxd-button-icon']");
 
     public Users fillUserNameField(String userName){
+        ActionHelper.waitForPresence(userNameField);
         ActionHelper.waitForVisibility(userNameField);
         ActionHelper.type(userNameField,userName);
         return this;
@@ -124,15 +125,15 @@ public class Users {
         return this;
     }
 
-    public EditUserCard editUserByUserName(String userName) {
+    public AddUserCard editUserByUserName(String userName) {
         By editIcon = By.xpath(String.format(userActionsXpath, userName) + "[2]");
 
-        ActionHelper.waitForVisibility(editIcon);
-        ActionHelper.click(editIcon);
+        ActionHelper.waitForPresence(editIcon);
+        ActionHelper.actionClick(editIcon);
 
         ActionHelper.waitForVisibility(editUserTitle);
 
-        return new EditUserCard();
+        return new AddUserCard();
     }
 
     public Users deleteSelectedUser(){

@@ -1,15 +1,18 @@
 package com.demoproject.tests;
 
+import com.demoproject.utils.ActionHelper;
 import com.demoproject.utils.Navigator;
+import org.openqa.selenium.By;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.util.Random;
 
-public class CreateNewUserTest extends BaseTest {
+public class EditUserTest extends BaseTest{
 
-    private static final Logger log = LoggerFactory.getLogger(CreateNewUserTest.class);
+    private static final Logger log = LoggerFactory.getLogger(EditUserTest.class);
 
     @Test
     public void test(){
@@ -24,6 +27,8 @@ public class CreateNewUserTest extends BaseTest {
 
         String employeeFullName = employeeName + " " + employeeName + " " + employeeName;
 
+        String editedUserName = username + "_edited";
+
         log.info("Create new employee");
 
         Navigator.getInstance().getOrange()
@@ -34,7 +39,7 @@ public class CreateNewUserTest extends BaseTest {
                 .fillLastName(employeeName)
                 .clickSaveButton();
 
-        log.info("Create new user");
+        log.info("Create new user and edit it.");
 
         Navigator.getInstance().getOrange()
                 .openNavBar()
@@ -50,8 +55,32 @@ public class CreateNewUserTest extends BaseTest {
                 .fillConfirmPasswordField("Random123")
                 .clickSaveButton();
 
-        log.info("User has been created successfully.");
-        log.info("The test passed successfully.");
+        Navigator.getInstance().getOrange()
+                .getAdmin()
+                .getUserManagement()
+                .getUsers()
+                .fillUserNameField(username)
+                .clickSearchBtn()
+                .editUserByUserName(username)
+                .fillUserNameField(editedUserName)
+                .clickSaveButton();
 
+        log.info("Search for edited user.");
+
+        Navigator.getInstance().getOrange()
+                .getAdmin()
+                .getUserManagement()
+                .getUsers()
+                .fillUserNameField(editedUserName)
+                .clickSearchBtn();
+
+        ActionHelper.waitForVisibility(By.xpath("//hr[@role='separator']/following-sibling::div//span"));
+        String expectedResult = "(1) Record Found";
+        String actualResult = ActionHelper.getText(By.xpath("//hr[@role='separator']/following-sibling::div//span"));
+
+        Assert.assertEquals(actualResult, expectedResult);
+
+        log.info("User has been edited successfully.");
+        log.info("The test passed successfully.");
     }
 }
