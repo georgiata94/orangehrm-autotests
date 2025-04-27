@@ -1,5 +1,6 @@
 package com.demoproject.pages;
 
+import com.demoproject.pages.admin.Job;
 import com.demoproject.pages.admin.UserManagement;
 import com.demoproject.utils.ActionHelper;
 import org.apache.logging.log4j.LogManager;
@@ -32,13 +33,14 @@ public class Admin {
         return ActionHelper.isCurrentUrlContains("admin/viewSystemUsers");
     }
 
-    public void getJob() {
+    public Job getJob() {
         if (!isOnJobPage()) {
             ActionHelper.waitForVisibility(jobButton);
             ActionHelper.click(jobButton);
         } else {
             logger.info("You are already on the Job page.");
         }
+        return new Job();
     }
 
     private boolean isOnJobPage() {

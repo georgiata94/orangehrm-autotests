@@ -4,7 +4,6 @@ import com.demoproject.pages.admin.usermanagement.users.AddUserCard;
 import com.demoproject.pages.admin.usermanagement.users.EditUserCard;
 import com.demoproject.utils.ActionHelper;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 
 public class Users {
 

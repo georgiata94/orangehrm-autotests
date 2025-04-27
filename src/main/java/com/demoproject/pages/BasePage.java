@@ -52,12 +52,14 @@ public class BasePage {
         return new LoginPage(driver);
     }
 
-    public void openNavBar(){
+    public BasePage openNavBar(){
         if(!driver.findElement(By.xpath("//input[@placeholder='Search']")).isDisplayed()){
             ActionHelper.click(navBarButton);
         } else {
             logger.info("Navigation bar is already opened.");
         }
+
+        return this;
     }
 
     public void closeNavBar(){
