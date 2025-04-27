@@ -7,8 +7,6 @@ import org.openqa.selenium.By;
 
 public class Users {
 
-
-
     private static final By userNameField = By.xpath("//label[text()='Username']/..//..//div//input[@class='oxd-input oxd-input--active']");
     private static final By userRoleDropDownBtn = By.xpath("//label[text()='User Role']/../..//i");
     private static final By optionList = By.xpath("//div[@role='listbox']");

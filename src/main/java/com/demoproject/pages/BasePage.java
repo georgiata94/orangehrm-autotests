@@ -18,10 +18,9 @@ public class BasePage {
 
     public BasePage(WebDriver driver) {
         this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(15));
         PageFactory.initElements(driver, this);
     }
-
 
     private static final By dashboardTab = By.xpath("//span[text()='Dashboard']");
     private static final By adminTab = By.xpath("//span[text()='Admin']");
@@ -58,7 +57,6 @@ public class BasePage {
         } else {
             logger.info("Navigation bar is already opened.");
         }
-
         return this;
     }
 
@@ -75,9 +73,23 @@ public class BasePage {
         return new Dashboard(driver);
     }
 
+    public Dashboard getDashboard(WebDriver driver, boolean performNavigation) {
+        if (!performNavigation) {
+            return new Dashboard(driver);
+        }
+        return getDashboard(driver);
+    }
+
     public Admin getAdmin() {
         clickTab(adminTab, driver);
         return new Admin();
+    }
+
+    public Admin getAdmin(boolean performNavigation) {
+        if (!performNavigation) {
+            return new Admin();
+        }
+        return getAdmin();
     }
 
     public Buzz getBuzz(WebDriver driver) {
@@ -85,9 +97,23 @@ public class BasePage {
         return new Buzz(driver);
     }
 
+    public Buzz getBuzz(WebDriver driver, boolean performNavigation) {
+        if (!performNavigation) {
+            return new Buzz(driver);
+        }
+        return getBuzz(driver);
+    }
+
     public Claim getClaim(WebDriver driver) {
         clickTab(claimTab, driver);
         return new Claim(driver);
+    }
+
+    public Claim getClaim(WebDriver driver, boolean performNavigation) {
+        if (!performNavigation) {
+            return new Claim(driver);
+        }
+        return getClaim(driver);
     }
 
     public Directory getDirectory(WebDriver driver) {
@@ -95,9 +121,23 @@ public class BasePage {
         return new Directory(driver);
     }
 
+    public Directory getDirectory(WebDriver driver, boolean performNavigation) {
+        if (!performNavigation) {
+            return new Directory(driver);
+        }
+        return getDirectory(driver);
+    }
+
     public Leave getLeave(WebDriver driver) {
         clickTab(leaveTab, driver);
         return new Leave(driver);
+    }
+
+    public Leave getLeave(WebDriver driver, boolean performNavigation) {
+        if (!performNavigation) {
+            return new Leave(driver);
+        }
+        return getLeave(driver);
     }
 
     public Maintenance getMaintenance(WebDriver driver) {
@@ -105,9 +145,23 @@ public class BasePage {
         return new Maintenance(driver);
     }
 
+    public Maintenance getMaintenance(WebDriver driver, boolean performNavigation) {
+        if (!performNavigation) {
+            return new Maintenance(driver);
+        }
+        return getMaintenance(driver);
+    }
+
     public MyInfo getMyInfo(WebDriver driver) {
         clickTab(myInfoTab, driver);
         return new MyInfo(driver);
+    }
+
+    public MyInfo getMyInfo(WebDriver driver, boolean performNavigation) {
+        if (!performNavigation) {
+            return new MyInfo(driver);
+        }
+        return getMyInfo(driver);
     }
 
     public Performance getPerformance(WebDriver driver) {
@@ -115,9 +169,23 @@ public class BasePage {
         return new Performance(driver);
     }
 
+    public Performance getPerformance(WebDriver driver, boolean performNavigation) {
+        if (!performNavigation) {
+            return new Performance(driver);
+        }
+        return getPerformance(driver);
+    }
+
     public PIM getPIM(WebDriver driver) {
         clickTab(pimTab, driver);
         return new PIM(driver);
+    }
+
+    public PIM getPIM(WebDriver driver, boolean performNavigation) {
+        if (!performNavigation) {
+            return new PIM(driver);
+        }
+        return getPIM(driver);
     }
 
     public Recruitment getRecruitment(WebDriver driver) {
@@ -125,8 +193,22 @@ public class BasePage {
         return new Recruitment(driver);
     }
 
+    public Recruitment getRecruitment(WebDriver driver, boolean performNavigation) {
+        if (!performNavigation) {
+            return new Recruitment(driver);
+        }
+        return getRecruitment(driver);
+    }
+
     public Time getTime(WebDriver driver) {
         clickTab(timeTab, driver);
         return new Time(driver);
+    }
+
+    public Time getTime(WebDriver driver, boolean performNavigation) {
+        if (!performNavigation) {
+            return new Time(driver);
+        }
+        return getTime(driver);
     }
 }

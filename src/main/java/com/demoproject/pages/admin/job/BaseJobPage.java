@@ -5,7 +5,6 @@ import org.openqa.selenium.By;
 
 public abstract class BaseJobPage<T extends BaseJobPage<T>> {
 
-    // Конкретни локатори за всички страници в Job секцията
     protected static final By addBtn = By.xpath("//text()[contains(., 'Add')]/ancestor::button");
     protected static final By checkBoxAll = By.xpath("//*[text()='Username']/preceding-sibling::div//input[@type='checkbox']");
     protected static final String userActionsXpath = "//div[text()='%s']/../following-sibling::div//i";
@@ -14,7 +13,6 @@ public abstract class BaseJobPage<T extends BaseJobPage<T>> {
     protected static final By editUserTitle = By.xpath("//h6[text()='Edit User']");
     protected static final By deleteSelectedButton = By.xpath("//i[@class='oxd-icon bi-trash-fill oxd-button-icon']");
 
-    // Основни методи, които използват тези локатори
     protected void clickAddButtonBase() {
         ActionHelper.waitForVisibility(addBtn);
         ActionHelper.click(addBtn);

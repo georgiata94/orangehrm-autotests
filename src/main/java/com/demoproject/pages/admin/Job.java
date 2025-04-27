@@ -17,72 +17,78 @@ public class Job {
     private static final By workShifts = By.xpath("//ul[@role='menu']//a[text()='Work Shifts']");
 
     public JobTitles getJobTitles() {
-        if (!isOnJobTitlesPage()) {
-            ActionHelper.waitForVisibility(jobTitles);
-            ActionHelper.click(jobTitles);
-        } else {
-            logger.info("You are already on the Job Titles page.");
-        }
+
+        ActionHelper.waitForVisibility(jobTitles);
+        ActionHelper.click(jobTitles);
+
         return new JobTitles();
     }
 
-    public PayGrades getPayGrades() {
-        if (!isOnPayGradesPage()) {
-            ActionHelper.waitForVisibility(payGrades);
-            ActionHelper.click(payGrades);
-        } else {
-            logger.info("You are already on the Pay Grades page.");
+    public JobTitles getJobTitles(boolean performNavigation) {
+        if (!performNavigation) {
+            return new JobTitles();
         }
+        return getJobTitles();
+    }
+
+    public PayGrades getPayGrades() {
+
+        ActionHelper.waitForVisibility(payGrades);
+        ActionHelper.click(payGrades);
+
         return new PayGrades();
     }
 
-    public EmploymentStatus getEmploymentStatus() {
-        if (!isOnEmploymentStatusPage()) {
-            ActionHelper.waitForVisibility(emplStatus);
-            ActionHelper.click(emplStatus);
-        } else {
-            logger.info("You are already on the Employment Status page.");
+    public PayGrades getPayGrades(boolean performNavigation) {
+        if (!performNavigation) {
+            return new PayGrades();
         }
+        return getPayGrades();
+    }
+
+    public EmploymentStatus getEmploymentStatus() {
+
+        ActionHelper.waitForVisibility(emplStatus);
+        ActionHelper.click(emplStatus);
+
         return new EmploymentStatus();
     }
 
-    public JobCategories getJobCategories() {
-        if (!isOnJobCategoriesPage()) {
-            ActionHelper.waitForVisibility(jobCategories);
-            ActionHelper.click(jobCategories);
-        } else {
-            logger.info("You are already on the Job Categories page.");
+    public EmploymentStatus getEmploymentStatus(boolean performNavigation) {
+        if (!performNavigation) {
+            return new EmploymentStatus();
         }
+        return getEmploymentStatus();
+    }
+
+    public JobCategories getJobCategories() {
+
+        ActionHelper.waitForVisibility(jobCategories);
+        ActionHelper.click(jobCategories);
+
         return new JobCategories();
     }
 
-    public WorkShifts getWorkShifts() {
-        if (!isOnWorkShiftsPage()) {
-            ActionHelper.waitForVisibility(workShifts);
-            ActionHelper.click(workShifts);
-        } else {
-            logger.info("You are already on the Work Shifts page.");
+    public JobCategories getJobCategories(boolean performNavigation) {
+        if (!performNavigation) {
+            return new JobCategories();
         }
+        return getJobCategories();
+    }
+
+    public WorkShifts getWorkShifts() {
+
+        ActionHelper.waitForVisibility(workShifts);
+        ActionHelper.click(workShifts);
+
         return new WorkShifts();
     }
 
-    private boolean isOnJobTitlesPage() {
-        return ActionHelper.isCurrentUrlContains("admin/viewJobTitleList");
+    public WorkShifts getWorkShifts(boolean performNavigation) {
+        if (!performNavigation) {
+            return new WorkShifts();
+        }
+        return getWorkShifts();
     }
 
-    private boolean isOnPayGradesPage() {
-        return ActionHelper.isCurrentUrlContains("admin/viewPayGrades");
-    }
-
-    private boolean isOnEmploymentStatusPage() {
-        return ActionHelper.isCurrentUrlContains("admin/employmentStatus");
-    }
-
-    private boolean isOnJobCategoriesPage() {
-        return ActionHelper.isCurrentUrlContains("admin/jobCategory");
-    }
-
-    private boolean isOnWorkShiftsPage() {
-        return ActionHelper.isCurrentUrlContains("admin/workShift");
-    }
 }

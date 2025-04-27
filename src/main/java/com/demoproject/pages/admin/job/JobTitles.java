@@ -1,7 +1,6 @@
 package com.demoproject.pages.admin.job;
 
 import com.demoproject.pages.admin.job.jobtitles.AddJobTitle;
-import org.openqa.selenium.By;
 
 public class JobTitles extends BaseJobPage<JobTitles> {
 

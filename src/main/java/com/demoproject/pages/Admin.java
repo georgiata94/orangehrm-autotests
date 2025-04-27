@@ -20,95 +20,93 @@ public class Admin {
     private static final By configurationButton = By.xpath("//text()[normalize-space()='Configuration']/..");
 
     public UserManagement getUserManagement() {
-        if (!isOnUserManagementPage()) {
-            ActionHelper.waitForVisibility(userManagementButton);
-            ActionHelper.click(userManagementButton);
-        } else {
-            logger.info("You are already on the User Management page.");
-        }
+        ActionHelper.waitForVisibility(userManagementButton);
+        ActionHelper.click(userManagementButton);
         return new UserManagement();
     }
 
-    private boolean isOnUserManagementPage() {
-        return ActionHelper.isCurrentUrlContains("admin/viewSystemUsers");
+    public UserManagement getUserManagement(boolean performNavigation) {
+        if (!performNavigation) {
+            return new UserManagement();
+        }
+        return getUserManagement();
     }
 
     public Job getJob() {
-        if (!isOnJobPage()) {
-            ActionHelper.waitForVisibility(jobButton);
-            ActionHelper.click(jobButton);
-        } else {
-            logger.info("You are already on the Job page.");
-        }
+
+        ActionHelper.waitForVisibility(jobButton);
+        ActionHelper.click(jobButton);
         return new Job();
     }
 
-    private boolean isOnJobPage() {
-        return ActionHelper.isCurrentUrlContains("admin/viewJobTitleList");
+    public Job getJob(boolean performNavigation) {
+        if (!performNavigation) {
+            return new Job();
+        }
+        return getJob();
     }
 
     public void getOrganization() {
-        if (!isOnOrganizationPage()) {
-            ActionHelper.waitForVisibility(organizationButton);
-            ActionHelper.click(organizationButton);
-        } else {
-            logger.info("You are already on the Organization page.");
-        }
+
+        ActionHelper.waitForVisibility(organizationButton);
+        ActionHelper.click(organizationButton);
     }
 
-    private boolean isOnOrganizationPage() {
-        return ActionHelper.isCurrentUrlContains("admin/viewOrganizationGeneralInformation");
+    public void getOrganization(boolean performNavigation) {
+        if (performNavigation) {
+            getOrganization();
+        }
     }
 
     public void getQualifications() {
-        if (!isOnQualificationsPage()) {
-            ActionHelper.waitForVisibility(qualificationsButton);
-            ActionHelper.click(qualificationsButton);
-        } else {
-            logger.info("You are already on the Qualifications page.");
-        }
+
+        ActionHelper.waitForVisibility(qualificationsButton);
+        ActionHelper.click(qualificationsButton);
+
     }
 
-    private boolean isOnQualificationsPage() {
-        return ActionHelper.isCurrentUrlContains("admin/viewQualifications");
+    public void getQualifications(boolean performNavigation) {
+        if (performNavigation) {
+            getQualifications();
+        }
     }
 
     public void getNationalities() {
-        if (!isOnNationalitiesPage()) {
-            ActionHelper.waitForVisibility(nationalitiesButton);
-            ActionHelper.click(nationalitiesButton);
-        } else {
-            logger.info("You are already on the Nationalities page.");
-        }
+
+        ActionHelper.waitForVisibility(nationalitiesButton);
+        ActionHelper.click(nationalitiesButton);
+
     }
 
-    private boolean isOnNationalitiesPage() {
-        return ActionHelper.isCurrentUrlContains("admin/nationality");
+    public void getNationalities(boolean performNavigation) {
+        if (performNavigation) {
+            getNationalities();
+        }
     }
 
     public void getCorporateBranding() {
-        if (!isOnCorporateBrandingPage()) {
-            ActionHelper.waitForVisibility(corporateBrandingButton);
-            ActionHelper.click(corporateBrandingButton);
-        } else {
-            logger.info("You are already on the Corporate Branding page.");
-        }
+
+        ActionHelper.waitForVisibility(corporateBrandingButton);
+        ActionHelper.click(corporateBrandingButton);
+
     }
 
-    private boolean isOnCorporateBrandingPage() {
-        return ActionHelper.isCurrentUrlContains("admin/corporateBranding");
+    public void getCorporateBranding(boolean performNavigation) {
+        if (performNavigation) {
+            getCorporateBranding();
+        }
     }
 
     public void getConfiguration() {
-        if (!isOnConfigurationPage()) {
-            ActionHelper.waitForVisibility(configurationButton);
-            ActionHelper.click(configurationButton);
-        } else {
-            logger.info("You are already on the Configuration page.");
-        }
+
+        ActionHelper.waitForVisibility(configurationButton);
+        ActionHelper.click(configurationButton);
+
     }
 
-    private boolean isOnConfigurationPage() {
-        return ActionHelper.isCurrentUrlContains("admin/viewEmailConfiguration");
+    public void getConfiguration(boolean performNavigation) {
+        if (performNavigation) {
+            getConfiguration();
+        }
     }
 }
