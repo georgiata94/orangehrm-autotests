@@ -40,11 +40,6 @@ public final class ActionHelper {
         return getWait().until(ExpectedConditions.visibilityOfElementLocated(locator));
     }
 
-//    public static void type(By locator, String text) {
-//        WebElement element = getWait().until(ExpectedConditions.visibilityOfElementLocated(locator));
-//        element.clear();
-//        element.sendKeys(text);
-//    }
 
     public static void type(By locator, String text) {
         WebElement element = getWait().until(ExpectedConditions.visibilityOfElementLocated(locator));
@@ -116,6 +111,12 @@ public final class ActionHelper {
 
     public static void jsClick(By locator) {
         WebElement element = getWait().until(ExpectedConditions.visibilityOfElementLocated(locator));
+        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].click();", element);
+    }
+
+    public static void jsScrollClick(By locator) {
+        WebElement element = getWait().until(ExpectedConditions.presenceOfElementLocated(locator));
+        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView(true);", element);
         ((JavascriptExecutor) getDriver()).executeScript("arguments[0].click();", element);
     }
 
