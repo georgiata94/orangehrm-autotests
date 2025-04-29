@@ -1,44 +1,42 @@
 package com.demoproject.pages.admin.job;
 
 import com.demoproject.utils.ActionHelper;
+import com.demoproject.utils.ButtonManager;
 import org.openqa.selenium.By;
 
 public abstract class BaseJobPage<T extends BaseJobPage<T>> {
 
-    protected static final By addBtn = By.xpath("//text()[contains(., 'Add')]/ancestor::button");
-    protected static final By checkBoxAll = By.xpath("//*[text()='Username']/preceding-sibling::div//input[@type='checkbox']");
-    protected static final String userActionsXpath = "//div[text()='%s']/../following-sibling::div//i";
-    protected static final By confirmDeleteBtn = By.xpath("//div[@class='orangehrm-modal-footer']//button//i");
-    protected static final By successToast = By.xpath("//div[@class='oxd-toast-start']");
-    protected static final By editUserTitle = By.xpath("//h6[text()='Edit User']");
-    protected static final By deleteSelectedButton = By.xpath("//i[@class='oxd-icon bi-trash-fill oxd-button-icon']");
-
     protected void clickAddButtonBase() {
+        By addBtn = ButtonManager.get("common.button.add.xpath");
         ActionHelper.waitForVisibility(addBtn);
         ActionHelper.click(addBtn);
     }
 
     @SuppressWarnings("unchecked")
     public T enableCheckBoxAll() {
+        By checkBoxAll = ButtonManager.get("common.checkbox.all.xpath");
         toggleCheckbox(checkBoxAll, ActionHelper.CheckboxState.ENABLE);
         return (T) this;
     }
 
     @SuppressWarnings("unchecked")
     public T disableCheckBoxAll() {
+        By checkBoxAll = ButtonManager.get("common.checkbox.all.xpath");
         toggleCheckbox(checkBoxAll, ActionHelper.CheckboxState.DISABLE);
         return (T) this;
     }
 
     @SuppressWarnings("unchecked")
     public T enableCheckBoxByName(String name) {
-        toggleCheckbox(getUserCheckboxLocator(name), ActionHelper.CheckboxState.ENABLE);
+        By checkBoxByName = ButtonManager.get("common.checkbox.user.xpath", name);
+        toggleCheckbox(checkBoxByName, ActionHelper.CheckboxState.ENABLE);
         return (T) this;
     }
 
     @SuppressWarnings("unchecked")
     public T disableCheckBoxByName(String name) {
-        toggleCheckbox(getUserCheckboxLocator(name), ActionHelper.CheckboxState.DISABLE);
+        By checkBoxByName = ButtonManager.get("common.checkbox.user.xpath", name);
+        toggleCheckbox(checkBoxByName, ActionHelper.CheckboxState.DISABLE);
         return (T) this;
     }
 
@@ -56,38 +54,40 @@ public abstract class BaseJobPage<T extends BaseJobPage<T>> {
 
     @SuppressWarnings("unchecked")
     public T deleteByName(String name) {
-        By deleteIcon = By.xpath(String.format(userActionsXpath, name) + "[1]");
+        By deleteIcon = ButtonManager.get("jobPage.userActionsDeleteIcon.xpath", name);
         ActionHelper.waitForVisibility(deleteIcon);
         ActionHelper.click(deleteIcon);
 
+        By confirmDeleteBtn = ButtonManager.get("common.delete.confirm.xpath");
         ActionHelper.waitForVisibility(confirmDeleteBtn);
         ActionHelper.click(confirmDeleteBtn);
 
+        By successToast = ButtonManager.get("common.toast.success.xpath");
         ActionHelper.waitForVisibility(successToast);
         return (T) this;
     }
 
     protected void editByNameBase(String name) {
-        By editIcon = By.xpath(String.format(userActionsXpath, name) + "[2]");
+        By editIcon = ButtonManager.get("jobPage.userActionsEditIcon.xpath", name);
         ActionHelper.waitForVisibility(editIcon);
         ActionHelper.click(editIcon);
+
+        By editUserTitle = ButtonManager.get("common.actions.edit.xpath");
         ActionHelper.waitForVisibility(editUserTitle);
     }
 
     @SuppressWarnings("unchecked")
     public T deleteSelected() {
+        By deleteSelectedButton = ButtonManager.get("common.actions.delete.xpath");
         ActionHelper.waitForVisibility(deleteSelectedButton);
         ActionHelper.click(deleteSelectedButton);
 
+        By confirmDeleteBtn = ButtonManager.get("common.delete.confirm.xpath");
         ActionHelper.waitForVisibility(confirmDeleteBtn);
         ActionHelper.click(confirmDeleteBtn);
 
+        By successToast = ButtonManager.get("common.toast.success.xpath");
         ActionHelper.waitForVisibility(successToast);
         return (T) this;
-    }
-
-    // Локатор за чекбокса на конкретен потребител
-    private By getUserCheckboxLocator(String userName) {
-        return By.xpath("//div[text()='" + userName + "']/../preceding-sibling::div//input[@type='checkbox']");
     }
 }

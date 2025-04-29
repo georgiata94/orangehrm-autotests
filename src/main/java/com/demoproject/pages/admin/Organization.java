@@ -1,60 +1,39 @@
 package com.demoproject.pages.admin;
 
-
 import com.demoproject.pages.admin.organization.GeneralInformation;
 import com.demoproject.pages.admin.organization.Locations;
 import com.demoproject.pages.admin.organization.Structure;
 import com.demoproject.utils.ActionHelper;
+import com.demoproject.utils.ButtonManager;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
+
+import java.util.function.Supplier;
 
 public class Organization {
 
-    public static final By generalInformationPage = By.xpath("//ul[@role='menu']//a[text()='General Information']");
-    public static final By locationsPage = By.xpath("//ul[@role='menu']//a[text()='Locations']");
-    public static final By structurePage = By.xpath("//ul[@role='menu']//a[text()='Structure']");
+    protected final Logger logger = LogManager.getLogger(getClass());
 
-    public GeneralInformation getGeneralInformation() {
-
-        ActionHelper.waitForVisibility(generalInformationPage);
-        ActionHelper.click(generalInformationPage);
-
-        return new GeneralInformation();
-    }
-
-    public GeneralInformation getOrganization(boolean performNavigation) {
-        if (!performNavigation) {
-            return new GeneralInformation();
-        }
-        return getGeneralInformation();
-    }
-
-    public Locations getLocations() {
-
-        ActionHelper.waitForVisibility(locationsPage);
-        ActionHelper.click(locationsPage);
-
-        return new Locations();
+    public GeneralInformation getGeneralInformation(boolean performNavigation) {
+        return navigateTo("admin.organization.generalinfo.xpath", performNavigation, GeneralInformation::new);
     }
 
     public Locations getLocations(boolean performNavigation) {
-        if (!performNavigation) {
-            return new Locations();
-        }
-        return getLocations();
-    }
-
-    public Structure getStructure() {
-
-        ActionHelper.waitForVisibility(structurePage);
-        ActionHelper.click(structurePage);
-
-        return new Structure();
+        return navigateTo("admin.organization.locations.xpath", performNavigation, Locations::new);
     }
 
     public Structure getStructure(boolean performNavigation) {
-        if (!performNavigation) {
-            return new Structure();
+        return navigateTo("admin.organization.structure.xpath", performNavigation, Structure::new);
+    }
+
+    private <T> T navigateTo(String key, boolean performNavigation, Supplier<T> pageSupplier) {
+        if (performNavigation) {
+            By locator = ButtonManager.get(key);
+            ActionHelper.waitForVisibility(locator);
+            ActionHelper.click(locator);
+            logger.info("Navigated to element: {}", key);
         }
-        return getStructure();
+        return pageSupplier.get();
     }
 }

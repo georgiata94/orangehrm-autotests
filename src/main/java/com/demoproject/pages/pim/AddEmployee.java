@@ -1,89 +1,65 @@
 package com.demoproject.pages.pim;
 
 import com.demoproject.pages.PIM;
-import com.demoproject.pages.admin.usermanagement.Users;
 import com.demoproject.utils.ActionHelper;
-import org.openqa.selenium.By;
-
-import javax.swing.*;
+import com.demoproject.utils.ButtonManager;
 
 public class AddEmployee {
 
-    private static final By employeeFirstName = By.xpath("//input[@name='firstName']");
-    private static final By employeeMiddleName = By.xpath("//input[@name='middleName']");
-    private static final By employeeLastName = By.xpath("//input[@name='lastName']");
-    private static final By radioButton = By.xpath("//input[@type='checkbox']");
-    private static final By username = By.xpath("//label[text()='Username']/../following-sibling::div//input[@autocomplete='off']");
-    private static final By password = By.xpath("//label[text()='Password']/../following-sibling::div//input[@autocomplete='off']");
-    private static final By confirmPassword = By.xpath("//label[text()='Confirm Password']/../following-sibling::div//input[@autocomplete='off']");
-    private static final By enabledButton = By.xpath("//input[@type='radio' and @value='1']");
-    private static final By disabledButton = By.xpath("//input[@type='radio' and @value='2']");
-    private static final By cancelButton = By.xpath("//button[text()=' Cancel ']");
-    private static final By saveButton = By.xpath("//button[text()=' Save ']");
-    private static final By successToast = By.xpath("//div[@class='oxd-toast-start']");
-
     public AddEmployee fillFirstName(String firstName){
-
-        ActionHelper.type(employeeFirstName,firstName);
+        ActionHelper.type(ButtonManager.get("addEmployee.firstName.xpath"), firstName);
         return this;
     }
 
     public AddEmployee fillMiddleName(String middleName){
-
-        ActionHelper.type(employeeMiddleName,middleName);
+        ActionHelper.type(ButtonManager.get("addEmployee.middleName.xpath"), middleName);
         return this;
     }
 
     public AddEmployee fillLastName(String lastName){
-
-        ActionHelper.type(employeeLastName,lastName);
+        ActionHelper.type(ButtonManager.get("addEmployee.lastName.xpath"), lastName);
         return this;
     }
 
     public AddEmployee clickRadioButton(){
-
-        ActionHelper.click(radioButton);
+        ActionHelper.click(ButtonManager.get("addEmployee.radioButton.xpath"));
         return this;
     }
 
     public AddEmployee fillUserName(String uname){
-
-        ActionHelper.type(username,uname);
+        ActionHelper.type(ButtonManager.get("addEmployee.username.xpath"), uname);
         return this;
     }
 
     public AddEmployee fillPassword(String psw){
-
-        ActionHelper.type(password,psw);
+        ActionHelper.type(ButtonManager.get("addEmployee.password.xpath"), psw);
         return this;
     }
 
-
     public AddEmployee fillConfirmPassword(String confirmPsw){
-
-        ActionHelper.type(confirmPassword,confirmPsw);
+        ActionHelper.type(ButtonManager.get("addEmployee.confirmPassword.xpath"), confirmPsw);
         return this;
     }
 
     public PIM clickCancelButton(){
-        ActionHelper.click(cancelButton);
+        ActionHelper.click(ButtonManager.get("common.button.cancel.xpath"));
         return new PIM();
     }
 
     public PIM clickSaveButton(){
-        ActionHelper.click(saveButton);
-        ActionHelper.waitForVisibility(successToast);
+        ActionHelper.click(ButtonManager.get("common.button.save.xpath"));
+        ActionHelper.waitForVisibility(ButtonManager.get("common.toast.success.xpath"));
         ActionHelper.waitForPageLoad();
         return new PIM();
     }
 
     public AddEmployee clickEnabled(){
-        ActionHelper.click(enabledButton);
-        return new AddEmployee();
+        ActionHelper.click(ButtonManager.get("addEmployee.enabledButton.xpath"));
+        return this;
     }
 
     public AddEmployee clickDisabled(){
-        ActionHelper.click(disabledButton);
-        return new AddEmployee();
+        ActionHelper.click(ButtonManager.get("addEmployee.disabledButton.xpath"));
+        return this;
     }
 }

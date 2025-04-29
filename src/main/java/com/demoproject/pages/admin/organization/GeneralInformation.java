@@ -1,101 +1,84 @@
 package com.demoproject.pages.admin.organization;
 
 import com.demoproject.utils.ActionHelper;
-import org.openqa.selenium.By;
+import com.demoproject.utils.ButtonManager;
 
 public class GeneralInformation {
 
-    private static final By radioBtn = By.xpath("//input[@type='checkbox']");
-    private static final By organizationNameField = By.xpath("//label[text()='Organization Name']/../following-sibling::div//input");
-    private static final By registrationNumberField = By.xpath("//label[text()='Registration Number']/../following-sibling::div//input");
-    private static final By phoneNumberField = By.xpath("//label[text()='Phone']/../following-sibling::div//input");
-    private static final By taxIDField= By.xpath("//label[text()='Tax ID']/../following-sibling::div//input");
-    private static final By faxField = By.xpath("//label[text()='Fax']/../following-sibling::div//input");
-    private static final By emailField = By.xpath("//label[text()='Email']/../following-sibling::div//input");
-    private static final By addressStreet1Field = By.xpath("//label[text()='Address Street 1']/../following-sibling::div//input");
-    private static final By addressStreet2Field = By.xpath("//label[text()='Address Street 2']/../following-sibling::div//input");
-    private static final By cityField = By.xpath("//label[text()='City']/../following-sibling::div//input");
-    private static final By stateProvinceField= By.xpath("//label[text()='State/Province']/../following-sibling::div//input");
-    private static final By zipPostalCodeField = By.xpath("//label[text()='Zip/Postal Code']/../following-sibling::div//input");
-    private static final By countryDropDown = By.xpath("//div[@class='oxd-select-wrapper']");
-    private static final By notesField = By.xpath("//textarea");
-    private static final By saveBtn = By.xpath("//button[text()=' Save ']");
-    private static final By numberOfEmployees = By.xpath("//div//p[@class='oxd-text oxd-text--p no-of-employees-value']");
-
-    public GeneralInformation clickRadioBtn(){
-        ActionHelper.click(radioBtn);
+    public GeneralInformation clickRadioBtn() {
+        ActionHelper.click(ButtonManager.get("generalInformation.radioBtn.xpath"));
         return new GeneralInformation();
     }
 
-    public GeneralInformation fillOrganizationNameField(String text){
-        ActionHelper.type(organizationNameField,text);
+    public GeneralInformation fillOrganizationNameField(String text) {
+        ActionHelper.type(ButtonManager.get("common.input.generic.xpath:Organization Name"), text);
         return new GeneralInformation();
     }
 
-    public GeneralInformation fillRegistrationNumberField(String text){
-        ActionHelper.type(registrationNumberField,text);
+    public GeneralInformation fillRegistrationNumberField(String text) {
+        ActionHelper.type(ButtonManager.get("common.input.generic.xpath:Registration Number"), text);
         return new GeneralInformation();
     }
 
-    public GeneralInformation fillPhoneNumberField(String text){
-        ActionHelper.type(phoneNumberField,text);
+    public GeneralInformation fillPhoneNumberField(String text) {
+        ActionHelper.type(ButtonManager.get("common.input.generic.xpath:Phone"), text);
         return new GeneralInformation();
     }
 
-    public GeneralInformation fillTaxIDField(String text){
-        ActionHelper.type(taxIDField,text);
+    public GeneralInformation fillTaxIDField(String text) {
+        ActionHelper.type(ButtonManager.get("common.input.generic.xpath:Tax ID"), text);
         return new GeneralInformation();
     }
 
-    public GeneralInformation fillFaxField(String text){
-        ActionHelper.type(faxField,text);
+    public GeneralInformation fillFaxField(String text) {
+        ActionHelper.type(ButtonManager.get("common.input.generic.xpath:Fax"), text);
         return new GeneralInformation();
     }
 
-    public GeneralInformation fillEmailField(String text){
-        ActionHelper.type(emailField,text);
+    public GeneralInformation fillEmailField(String text) {
+        ActionHelper.type(ButtonManager.get("common.input.generic.xpath:Email"), text);
         return new GeneralInformation();
     }
 
-    public GeneralInformation fillAddressStreet1Field(String text){
-        ActionHelper.type(addressStreet1Field,text);
+    public GeneralInformation fillAddressStreet1Field(String text) {
+        ActionHelper.type(ButtonManager.get("common.input.generic.xpath:Address Street 1"), text);
         return new GeneralInformation();
     }
 
-    public GeneralInformation fillAddressStreet2Field(String text){
-        ActionHelper.type(addressStreet2Field,text);
+    public GeneralInformation fillAddressStreet2Field(String text) {
+        ActionHelper.type(ButtonManager.get("common.input.generic.xpath:Address Street 2"), text);
         return new GeneralInformation();
     }
 
-    public GeneralInformation fillCityField(String text){
-        ActionHelper.type(cityField,text);
+    public GeneralInformation fillCityField(String text) {
+        ActionHelper.type(ButtonManager.get("common.input.generic.xpath:City"), text);
         return new GeneralInformation();
     }
 
-    public GeneralInformation fillStateProvinceField(String text){
-        ActionHelper.type(stateProvinceField,text);
+    public GeneralInformation fillStateProvinceField(String text) {
+        ActionHelper.type(ButtonManager.get("common.input.generic.xpath:State/Province"), text);
         return new GeneralInformation();
     }
 
-    public GeneralInformation fillZipPostalCodeField(String text){
-        ActionHelper.type(zipPostalCodeField,text);
+    public GeneralInformation fillZipPostalCodeField(String text) {
+        ActionHelper.type(ButtonManager.get("Create new scratch file from selection"), text);
         return new GeneralInformation();
     }
 
-    public GeneralInformation fillNotesField(String text){
-        ActionHelper.type(notesField,text);
+    public GeneralInformation fillNotesField(String text) {
+        ActionHelper.type(ButtonManager.get("generalInformation.notesField.xpath"), text);
         return new GeneralInformation();
     }
 
-    public GeneralInformation clickSaveButton(){
-        ActionHelper.click(saveBtn);
+    public GeneralInformation clickSaveButton() {
+        ActionHelper.click(ButtonManager.get("common.button.save.xpath"));
         return new GeneralInformation();
     }
 
-    public GeneralInformation selectCountryByText(String country){
-        ActionHelper.click(countryDropDown);
-        ActionHelper.waitForVisibility(By.xpath("//div[@role='option']"));
-        ActionHelper.jsScrollClick(By.xpath("//div[@role='option']//span[text()='"+country+"']"));
+    public GeneralInformation selectCountryByText(String country) {
+        ActionHelper.click(ButtonManager.get("common.dropdown.generic.xpath"));
+        ActionHelper.waitForVisibility(ButtonManager.get("common.dropdown.option.xpath"));
+        ActionHelper.jsScrollClick(ButtonManager.get("common.dropdown.option.xpath", country));
         return this;
     }
 }

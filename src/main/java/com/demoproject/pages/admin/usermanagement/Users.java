@@ -1,48 +1,32 @@
 package com.demoproject.pages.admin.usermanagement;
 
 import com.demoproject.pages.admin.usermanagement.users.AddUserCard;
-import com.demoproject.pages.admin.usermanagement.users.EditUserCard;
 import com.demoproject.utils.ActionHelper;
+import com.demoproject.utils.ButtonManager;
 import org.openqa.selenium.By;
 
 public class Users {
 
-    private static final By userNameField = By.xpath("//label[text()='Username']/..//..//div//input[@class='oxd-input oxd-input--active']");
-    private static final By userRoleDropDownBtn = By.xpath("//label[text()='User Role']/../..//i");
-    private static final By optionList = By.xpath("//div[@role='listbox']");
-    private static final By statusDropDownBtn = By.xpath("//label[text()='Status']/../..//i");
-    private static final By employeeNameField = By.xpath("//input[@placeholder='Type for hints...']");
-    private static final By resetBtn = By.xpath("//text()[contains(., 'Reset')]/ancestor::button");
-    private static final By searchBtn = By.xpath("//text()[contains(., 'Search')]/ancestor::button");
-    private static final By recordsFoundText = By.xpath("//div[@class='orangehrm-horizontal-padding orangehrm-vertical-padding']//span");
-    private static final By addBtn = By.xpath("//text()[contains(., 'Add')]/ancestor::button");
-    private static final By checkBoxAll = By.xpath("//*[text()='Username']/preceding-sibling::div//input[@type='checkbox']");
-    private static final String userActionsXpath = "(//div[text()='%s']/../following-sibling::div//i)";
-    private static final By confirmDeleteBtn = By.xpath("//div[@class='orangehrm-modal-footer']//button//i");
-    private static final By successToast = By.xpath("//div[@class='oxd-toast-start']");
-    private static final By editUserTitle = By.xpath("//h6[text()='Edit User']");
-    private static final By deleteSelectedButton = By.xpath("//i[@class='oxd-icon bi-trash-fill oxd-button-icon']");
-
     public Users fillUserNameField(String userName){
-        ActionHelper.waitForPresence(userNameField);
-        ActionHelper.waitForVisibility(userNameField);
-        ActionHelper.type(userNameField,userName);
+        ActionHelper.waitForPresence(ButtonManager.get("users.userNameField.xpath"));
+        ActionHelper.waitForVisibility(ButtonManager.get("users.userNameField.xpath"));
+        ActionHelper.type(ButtonManager.get("users.userNameField.xpath"), userName);
         return this;
     }
 
     public Users selectUserRoleByText(String userRole) {
-        return selectDropdownOption(userRoleDropDownBtn, userRole);
+        return selectDropdownOption(ButtonManager.get("users.userRoleDropDownBtn.xpath"), userRole);
     }
 
     public Users selectStatusByText(String status) {
-        return selectDropdownOption(statusDropDownBtn, status);
+        return selectDropdownOption(ButtonManager.get("users.statusDropDownBtn.xpath"), status);
     }
 
     private Users selectDropdownOption(By dropdownButton, String optionText) {
         ActionHelper.waitForVisibility(dropdownButton);
         ActionHelper.click(dropdownButton);
 
-        ActionHelper.waitForVisibility(optionList);
+        ActionHelper.waitForVisibility(ButtonManager.get("users.optionList.xpath"));
 
         By optionLocator = By.xpath("//div[@role='option' and contains(normalize-space(), '" + optionText + "')]");
         ActionHelper.waitForVisibility(optionLocator);
@@ -52,37 +36,37 @@ public class Users {
     }
 
     public Users fillEmployeeName(String empName){
-        ActionHelper.waitForVisibility(employeeNameField);
-        ActionHelper.type(employeeNameField,empName);
+        ActionHelper.waitForVisibility(ButtonManager.get("users.employeeNameField.xpath"));
+        ActionHelper.type(ButtonManager.get("users.employeeNameField.xpath"), empName);
         return this;
     }
 
     public Users clickResetBtn(){
-        ActionHelper.waitForVisibility(resetBtn);
-        ActionHelper.click(resetBtn);
-        ActionHelper.waitForVisibility(recordsFoundText);
+        ActionHelper.waitForVisibility(ButtonManager.get("common.button.reset.xpath"));
+        ActionHelper.click(ButtonManager.get("common.button.reset.xpath"));
+        ActionHelper.waitForVisibility(ButtonManager.get("common.records.found.xpath"));
         return this;
     }
 
     public Users clickSearchBtn(){
-        ActionHelper.waitForVisibility(searchBtn);
-        ActionHelper.click(searchBtn);
-        ActionHelper.waitForVisibility(recordsFoundText);
+        ActionHelper.waitForVisibility(ButtonManager.get("common.button.search.xpath"));
+        ActionHelper.click(ButtonManager.get("common.button.search.xpath"));
+        ActionHelper.waitForVisibility(ButtonManager.get("common.records.found.xpath"));
         return this;
     }
 
     public AddUserCard clickAddBtn(){
-        ActionHelper.waitForVisibility(addBtn);
-        ActionHelper.click(addBtn);
+        ActionHelper.waitForVisibility(ButtonManager.get("common.button.add.xpath"));
+        ActionHelper.click(ButtonManager.get("common.button.add.xpath"));
         return new AddUserCard();
     }
 
     public Users enableCheckBoxAll() {
-        return toggleCheckbox(checkBoxAll, ActionHelper.CheckboxState.ENABLE);
+        return toggleCheckbox(ButtonManager.get("common.checkbox.all.xpath"), ActionHelper.CheckboxState.ENABLE);
     }
 
     public Users disableCheckBoxAll() {
-        return toggleCheckbox(checkBoxAll, ActionHelper.CheckboxState.DISABLE);
+        return toggleCheckbox(ButtonManager.get("common.checkbox.all.xpath"), ActionHelper.CheckboxState.DISABLE);
     }
 
     public Users enableCheckBoxByUserName(String userName) {
@@ -94,7 +78,7 @@ public class Users {
     }
 
     private By getUserCheckboxLocator(String userName) {
-        return By.xpath("//div[text()='" + userName + "']/../preceding-sibling::div//input[@type='checkbox']");
+        return ButtonManager.get("users.userCheckbox.xpath", userName);
     }
 
     private Users toggleCheckbox(By locator, ActionHelper.CheckboxState state) {
@@ -112,36 +96,32 @@ public class Users {
     }
 
     public Users deleteUserByUserName(String userName) {
-        By deleteIcon = By.xpath(String.format(userActionsXpath, userName) + "[1]");
-
+        By deleteIcon = ButtonManager.get("users.userActionsXpath.xpath", userName + "/../following-sibling::div//i[1]");
         ActionHelper.waitForVisibility(deleteIcon);
         ActionHelper.click(deleteIcon);
 
-        ActionHelper.waitForVisibility(confirmDeleteBtn);
-        ActionHelper.click(confirmDeleteBtn);
+        ActionHelper.waitForVisibility(ButtonManager.get("common.delete.confirm.xpath"));
+        ActionHelper.click(ButtonManager.get("common.delete.confirm.xpath"));
 
-        ActionHelper.waitForVisibility(successToast);
-
+        ActionHelper.waitForVisibility(ButtonManager.get("common.toast.success.xpath"));
         return this;
     }
 
     public AddUserCard editUserByUserName(String userName) {
-        By editIcon = By.xpath(String.format(userActionsXpath, userName) + "[2]");
-
+        By editIcon = ButtonManager.get("users.userActionsXpath.xpath", userName + "/../following-sibling::div//i[2]");
         ActionHelper.waitForPresence(editIcon);
         ActionHelper.actionClick(editIcon);
 
-        ActionHelper.waitForVisibility(editUserTitle);
-
+        ActionHelper.waitForVisibility(ButtonManager.get("common.actions.edit.xpath"));
         return new AddUserCard();
     }
 
     public Users deleteSelectedUser(){
-        ActionHelper.waitForVisibility(deleteSelectedButton);
-        ActionHelper.click(deleteSelectedButton);
-        ActionHelper.waitForVisibility(confirmDeleteBtn);
-        ActionHelper.click(confirmDeleteBtn);
-        ActionHelper.waitForVisibility(successToast);
+        ActionHelper.waitForVisibility(ButtonManager.get("common.actions.delete.xpath"));
+        ActionHelper.click(ButtonManager.get("common.actions.delete.xpath"));
+        ActionHelper.waitForVisibility(ButtonManager.get("common.delete.confirm.xpath"));
+        ActionHelper.click(ButtonManager.get("common.delete.confirm.xpath"));
+        ActionHelper.waitForVisibility(ButtonManager.get("common.toast.success.xpath"));
         return this;
     }
 }

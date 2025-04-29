@@ -1,6 +1,7 @@
 package com.demoproject.pages;
 
 import com.demoproject.utils.ActionHelper;
+import com.demoproject.utils.ButtonManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
@@ -22,193 +23,97 @@ public class BasePage {
         PageFactory.initElements(driver, this);
     }
 
-    private static final By dashboardTab = By.xpath("//span[text()='Dashboard']");
-    private static final By adminTab = By.xpath("//span[text()='Admin']");
-    private static final By buzzTab = By.xpath("//span[text()='Buzz']");
-    private static final By claimTab = By.xpath("//span[text()='Claim']");
-    private static final By directoryTab = By.xpath("//span[text()='Directory']");
-    private static final By leaveTab = By.xpath("//span[text()='Leave']");
-    private static final By maintenanceTab = By.xpath("//span[text()='Maintenance']");
-    private static final By myInfoTab = By.xpath("//span[text()='My Info']");
-    private static final By performanceTab = By.xpath("//span[text()='Performance']");
-    private static final By pimTab = By.xpath("//span[text()='PIM']");
-    private static final By recruitmentTab = By.xpath("//span[text()='Recruitment']");
-    private static final By timeTab = By.xpath("//span[text()='Time']");
-    private static final By userInfoDropdown = By.xpath("//p[@class='oxd-userdropdown-name']");
-    private static final By logoutButton = By.xpath("//a[text()='Logout']");
-    private static final By navBarButton = By.xpath("//button//i[@class='oxd-icon bi-chevron-left']");
-    private static final By navBarSearchButton = By.xpath("//button//i[@class='oxd-icon bi-chevron-left']");
-
-    private void clickTab(By locator, WebDriver driver) {
+    private void navigateTo(String locatorKey) {
+        By locator = ButtonManager.get(locatorKey);
         ActionHelper.setDriver(driver);
+        ActionHelper.waitForVisibility(locator);
         ActionHelper.click(locator);
+        logger.info("Navigated using locator: {}", locatorKey);
     }
 
     public LoginPage clickLogout() {
         ActionHelper.setDriver(driver);
-        ActionHelper.click(userInfoDropdown);
-        ActionHelper.click(logoutButton);
+        ActionHelper.click(ButtonManager.get("header.userdropdown.xpath"));
+        ActionHelper.click(ButtonManager.get("header.logout.xpath"));
         return new LoginPage(driver);
     }
 
-    public BasePage openNavBar(){
-        if(!driver.findElement(By.xpath("//input[@placeholder='Search']")).isDisplayed()){
-            ActionHelper.click(navBarButton);
+    public BasePage openNavBar() {
+        By searchInput = ButtonManager.get("navbar.search.input");
+        if (!driver.findElement(searchInput).isDisplayed()) {
+            ActionHelper.click(ButtonManager.get("navbar.toggle.button"));
         } else {
             logger.info("Navigation bar is already opened.");
         }
         return this;
     }
 
-    public void closeNavBar(){
-        if(driver.findElement(By.xpath("//input[@placeholder='Search']")).isDisplayed()){
-            ActionHelper.click(navBarButton);
+    public void closeNavBar() {
+        By searchInput = ButtonManager.get("navbar.search.input");
+        if (driver.findElement(searchInput).isDisplayed()) {
+            ActionHelper.click(ButtonManager.get("navbar.toggle.button"));
         } else {
             logger.info("Navigation bar is already closed.");
         }
     }
 
-    public Dashboard getDashboard(WebDriver driver) {
-        clickTab(dashboardTab, driver);
+    public Dashboard getDashboard(boolean performNavigation) {
+        if (performNavigation) navigateTo("menu.dashboard.xpath");
         return new Dashboard(driver);
     }
 
-    public Dashboard getDashboard(WebDriver driver, boolean performNavigation) {
-        if (!performNavigation) {
-            return new Dashboard(driver);
-        }
-        return getDashboard(driver);
-    }
-
-    public Admin getAdmin() {
-        clickTab(adminTab, driver);
+    public Admin getAdmin(boolean performNavigation) {
+        if (performNavigation) navigateTo("menu.admin.xpath");
         return new Admin();
     }
 
-    public Admin getAdmin(boolean performNavigation) {
-        if (!performNavigation) {
-            return new Admin();
-        }
-        return getAdmin();
-    }
-
-    public Buzz getBuzz(WebDriver driver) {
-        clickTab(buzzTab, driver);
+    public Buzz getBuzz(boolean performNavigation) {
+        if (performNavigation) navigateTo("menu.buzz.xpath");
         return new Buzz(driver);
     }
 
-    public Buzz getBuzz(WebDriver driver, boolean performNavigation) {
-        if (!performNavigation) {
-            return new Buzz(driver);
-        }
-        return getBuzz(driver);
-    }
-
-    public Claim getClaim(WebDriver driver) {
-        clickTab(claimTab, driver);
+    public Claim getClaim(boolean performNavigation) {
+        if (performNavigation) navigateTo("menu.claim.xpath");
         return new Claim(driver);
     }
 
-    public Claim getClaim(WebDriver driver, boolean performNavigation) {
-        if (!performNavigation) {
-            return new Claim(driver);
-        }
-        return getClaim(driver);
-    }
-
-    public Directory getDirectory(WebDriver driver) {
-        clickTab(directoryTab, driver);
+    public Directory getDirectory(boolean performNavigation) {
+        if (performNavigation) navigateTo("menu.directory.xpath");
         return new Directory(driver);
     }
 
-    public Directory getDirectory(WebDriver driver, boolean performNavigation) {
-        if (!performNavigation) {
-            return new Directory(driver);
-        }
-        return getDirectory(driver);
-    }
-
-    public Leave getLeave(WebDriver driver) {
-        clickTab(leaveTab, driver);
+    public Leave getLeave(boolean performNavigation) {
+        if (performNavigation) navigateTo("menu.leave.xpath");
         return new Leave(driver);
     }
 
-    public Leave getLeave(WebDriver driver, boolean performNavigation) {
-        if (!performNavigation) {
-            return new Leave(driver);
-        }
-        return getLeave(driver);
-    }
-
-    public Maintenance getMaintenance(WebDriver driver) {
-        clickTab(maintenanceTab, driver);
+    public Maintenance getMaintenance(boolean performNavigation) {
+        if (performNavigation) navigateTo("menu.maintenance.xpath");
         return new Maintenance(driver);
     }
 
-    public Maintenance getMaintenance(WebDriver driver, boolean performNavigation) {
-        if (!performNavigation) {
-            return new Maintenance(driver);
-        }
-        return getMaintenance(driver);
-    }
-
-    public MyInfo getMyInfo(WebDriver driver) {
-        clickTab(myInfoTab, driver);
+    public MyInfo getMyInfo(boolean performNavigation) {
+        if (performNavigation) navigateTo("menu.myinfo.xpath");
         return new MyInfo(driver);
     }
 
-    public MyInfo getMyInfo(WebDriver driver, boolean performNavigation) {
-        if (!performNavigation) {
-            return new MyInfo(driver);
-        }
-        return getMyInfo(driver);
-    }
-
-    public Performance getPerformance(WebDriver driver) {
-        clickTab(performanceTab, driver);
+    public Performance getPerformance(boolean performNavigation) {
+        if (performNavigation) navigateTo("menu.performance.xpath");
         return new Performance(driver);
     }
 
-    public Performance getPerformance(WebDriver driver, boolean performNavigation) {
-        if (!performNavigation) {
-            return new Performance(driver);
-        }
-        return getPerformance(driver);
-    }
-
-    public PIM getPIM() {
-        clickTab(pimTab, driver);
+    public PIM getPIM(boolean performNavigation) {
+        if (performNavigation) navigateTo("menu.pim.xpath");
         return new PIM();
     }
 
-    public PIM getPIM(WebDriver driver, boolean performNavigation) {
-        if (!performNavigation) {
-            return new PIM();
-        }
-        return getPIM();
-    }
-
-    public Recruitment getRecruitment(WebDriver driver) {
-        clickTab(recruitmentTab, driver);
+    public Recruitment getRecruitment(boolean performNavigation) {
+        if (performNavigation) navigateTo("menu.recruitment.xpath");
         return new Recruitment(driver);
     }
 
-    public Recruitment getRecruitment(WebDriver driver, boolean performNavigation) {
-        if (!performNavigation) {
-            return new Recruitment(driver);
-        }
-        return getRecruitment(driver);
-    }
-
-    public Time getTime(WebDriver driver) {
-        clickTab(timeTab, driver);
+    public Time getTime(boolean performNavigation) {
+        if (performNavigation) navigateTo("menu.time.xpath");
         return new Time(driver);
-    }
-
-    public Time getTime(WebDriver driver, boolean performNavigation) {
-        if (!performNavigation) {
-            return new Time(driver);
-        }
-        return getTime(driver);
     }
 }

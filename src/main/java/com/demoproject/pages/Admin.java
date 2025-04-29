@@ -2,111 +2,64 @@ package com.demoproject.pages;
 
 import com.demoproject.pages.admin.Job;
 import com.demoproject.pages.admin.UserManagement;
-import com.demoproject.utils.ActionHelper;
+import com.demoproject.utils.ButtonManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 
-public class Admin {
+import static com.demoproject.utils.ActionHelper.*;
 
+public class Admin {
     protected final Logger logger = LogManager.getLogger(getClass());
 
-    private static final By userManagementButton = By.xpath("//text()[normalize-space()='User Management']/ancestor::span[@class='oxd-topbar-body-nav-tab-item']");
-    private static final By jobButton = By.xpath("(//text()[normalize-space()='Job']/..)[2]");
-    private static final By organizationButton = By.xpath("//text()[normalize-space()='Organization']/..");
-    private static final By qualificationsButton = By.xpath("//text()[normalize-space()='Qualifications']/..");
-    private static final By nationalitiesButton = By.xpath("//text()[normalize-space()='Nationalities']/..");
-    private static final By corporateBrandingButton = By.xpath("//text()[normalize-space()='Corporate Branding']/..");
-    private static final By configurationButton = By.xpath("//text()[normalize-space()='Configuration']/..");
-
-    public UserManagement getUserManagement() {
-        ActionHelper.waitForVisibility(userManagementButton);
-        ActionHelper.click(userManagementButton);
+    public UserManagement getUserManagement(boolean performNavigation) {
+        if (performNavigation) {
+            navigateTo("admin.usermanagement.xpath");
+        }
         return new UserManagement();
     }
 
-    public UserManagement getUserManagement(boolean performNavigation) {
-        if (!performNavigation) {
-            return new UserManagement();
-        }
-        return getUserManagement();
-    }
-
-    public Job getJob() {
-
-        ActionHelper.waitForVisibility(jobButton);
-        ActionHelper.click(jobButton);
-        return new Job();
-    }
-
     public Job getJob(boolean performNavigation) {
-        if (!performNavigation) {
-            return new Job();
+        if (performNavigation) {
+            navigateTo("admin.job.xpath");
         }
-        return getJob();
-    }
-
-    public void getOrganization() {
-
-        ActionHelper.waitForVisibility(organizationButton);
-        ActionHelper.click(organizationButton);
+        return new Job();
     }
 
     public void getOrganization(boolean performNavigation) {
         if (performNavigation) {
-            getOrganization();
+            navigateTo("admin.organization.xpath");
         }
-    }
-
-    public void getQualifications() {
-
-        ActionHelper.waitForVisibility(qualificationsButton);
-        ActionHelper.click(qualificationsButton);
-
     }
 
     public void getQualifications(boolean performNavigation) {
         if (performNavigation) {
-            getQualifications();
+            navigateTo("admin.qualifications.xpath");
         }
-    }
-
-    public void getNationalities() {
-
-        ActionHelper.waitForVisibility(nationalitiesButton);
-        ActionHelper.click(nationalitiesButton);
-
     }
 
     public void getNationalities(boolean performNavigation) {
         if (performNavigation) {
-            getNationalities();
+            navigateTo("admin.nationalities.xpath");
         }
-    }
-
-    public void getCorporateBranding() {
-
-        ActionHelper.waitForVisibility(corporateBrandingButton);
-        ActionHelper.click(corporateBrandingButton);
-
     }
 
     public void getCorporateBranding(boolean performNavigation) {
         if (performNavigation) {
-            getCorporateBranding();
+            navigateTo("admin.branding.xpath");
         }
-    }
-
-    public void getConfiguration() {
-
-        ActionHelper.waitForVisibility(configurationButton);
-        ActionHelper.click(configurationButton);
-
     }
 
     public void getConfiguration(boolean performNavigation) {
         if (performNavigation) {
-            getConfiguration();
+            navigateTo("admin.configuration.xpath");
         }
+    }
+
+    private void navigateTo(String locatorKey) {
+        By locator = ButtonManager.get(locatorKey);
+        waitForVisibility(locator);
+        click(locator);
+        logger.info("Navigated using locator: {}", locatorKey);
     }
 }

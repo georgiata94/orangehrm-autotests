@@ -2,55 +2,42 @@ package com.demoproject.pages.admin.usermanagement.users;
 
 import com.demoproject.pages.admin.usermanagement.Users;
 import com.demoproject.utils.ActionHelper;
-import org.openqa.selenium.AcceptedW3CCapabilityKeys;
+import com.demoproject.utils.ButtonManager;
 import org.openqa.selenium.By;
-
-import javax.swing.*;
 
 public class AddUserCard {
 
-    private static final By userRoleDropDown = By.xpath("//label[text()='User Role']/../..//div[text()='-- Select --']");
-    private static final By emplNameField = By.xpath("//input[@placeholder='Type for hints...']");
-    private static final By statusDropDown = By.xpath("//label[text()='Status']/../..//div[text()='-- Select --']");
-    private static final By usernameField = By.xpath("//label[text()='Username']/../following-sibling::div//input");
-    private static final By passwordField = By.xpath("//label[text()='Password']/../following-sibling::div//input");
-    private static final By confirmPasswordField = By.xpath("//label[text()='Confirm Password']/../following-sibling::div//input");
-    private static final By cancelButton = By.xpath("//button[text()=' Cancel ']");
-    private static final By saveButton = By.xpath("//button[text()=' Save ']");
-    private static final By optionList = By.xpath("//div[@role='listbox']");
-    private static final By successToast = By.xpath("//div[@class='oxd-toast-start']");
-
     public AddUserCard fillUserNameField(String userName){
-        ActionHelper.waitForVisibility(usernameField);
-        ActionHelper.type(usernameField,userName);
+        ActionHelper.waitForVisibility(ButtonManager.get("common.input.generic.xpath","Username"));
+        ActionHelper.type(ButtonManager.get("common.input.generic.xpath","Username"), userName);
         return this;
     }
 
     public AddUserCard fillPasswordField(String password){
-        ActionHelper.waitForVisibility(passwordField);
-        ActionHelper.type(passwordField,password);
+        ActionHelper.waitForVisibility(ButtonManager.get("common.input.generic.xpath","Password"));
+        ActionHelper.type(ButtonManager.get("common.input.generic.xpath","Password"), password);
         return this;
     }
 
     public AddUserCard fillConfirmPasswordField(String confirmPassword){
-        ActionHelper.waitForVisibility(confirmPasswordField);
-        ActionHelper.type(confirmPasswordField,confirmPassword);
+        ActionHelper.waitForVisibility(ButtonManager.get("common.input.generic.xpath:Confirm Password"));
+        ActionHelper.type(ButtonManager.get("common.input.generic.xpath:Confirm Password"), confirmPassword);
         return this;
     }
 
     public AddUserCard selectUserRoleByText(String userRole) {
-        return selectDropdownOption(userRoleDropDown, userRole);
+        return selectDropdownOption(ButtonManager.get("addUserCard.userRoleDropDown.xpath"), userRole);
     }
 
     public AddUserCard selectStatusByText(String status) {
-        return selectDropdownOption(statusDropDown, status);
+        return selectDropdownOption(ButtonManager.get("addUserCard.statusDropDown.xpath"), status);
     }
 
     private AddUserCard selectDropdownOption(By dropdownButton, String optionText) {
         ActionHelper.waitForVisibility(dropdownButton);
         ActionHelper.click(dropdownButton);
 
-        ActionHelper.waitForVisibility(optionList);
+        ActionHelper.waitForVisibility(ButtonManager.get("addUserCard.optionList.xpath"));
 
         By optionLocator = By.xpath("//div[@role='option' and contains(normalize-space(), '" + optionText + "')]");
         ActionHelper.waitForVisibility(optionLocator);
@@ -60,21 +47,21 @@ public class AddUserCard {
     }
 
     public AddUserCard fillEmployeeName(String emplName, String fullName){
-        ActionHelper.waitForVisibility(emplNameField);
-        ActionHelper.type(emplNameField,emplName);
+        ActionHelper.waitForVisibility(ButtonManager.get("addUserCard.emplNameField.xpath"));
+        ActionHelper.type(ButtonManager.get("addUserCard.emplNameField.xpath"), emplName);
         ActionHelper.waitForVisibility(By.xpath("//div[@role='option']//span[text()='"+fullName+"']"));
         ActionHelper.click(By.xpath("//div[@role='option']//span[text()='"+fullName+"']"));
         return this;
     }
 
     public Users clickCancelButton(){
-        ActionHelper.click(cancelButton);
+        ActionHelper.click(ButtonManager.get("common.button.cancel.xpath"));
         return new Users();
     }
 
     public Users clickSaveButton(){
-        ActionHelper.click(saveButton);
-        ActionHelper.waitForVisibility(successToast);
+        ActionHelper.click(ButtonManager.get("common.button.save.xpath"));
+        ActionHelper.waitForVisibility(ButtonManager.get("common.toast.success.xpath"));
         ActionHelper.waitForPageLoad();
         return new Users();
     }
