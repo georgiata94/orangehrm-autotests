@@ -1,6 +1,7 @@
 package com.demoproject.navigatorpages.pages;
 
 import com.demoproject.navigatorpages.pages.admin.Job;
+import com.demoproject.navigatorpages.pages.admin.Qualifications;
 import com.demoproject.navigatorpages.pages.admin.UserManagement;
 import com.demoproject.utils.ButtonManager;
 import org.apache.logging.log4j.LogManager;
@@ -32,10 +33,11 @@ public class Admin {
         }
     }
 
-    public void getQualifications(boolean performNavigation) {
+    public Qualifications getQualifications(boolean performNavigation) {
         if (performNavigation) {
             navigateTo("admin.qualifications.xpath");
         }
+        return new Qualifications();
     }
 
     public void getNationalities(boolean performNavigation) {

@@ -1,6 +1,6 @@
 package com.demoproject.navigatorpages.pages.admin.job;
 
-import com.demoproject.navigatorpages.pages.admin.job.jobtitles.AddJobCategory;
+import com.demoproject.navigatorpages.pages.admin.job.jobcategories.AddJobCategory;
 
 public class JobCategories extends BaseJobPage<JobCategories> {
 

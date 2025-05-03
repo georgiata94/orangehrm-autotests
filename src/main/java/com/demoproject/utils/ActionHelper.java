@@ -8,6 +8,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
+import java.util.List;
 import java.util.Objects;
 
 public final class ActionHelper {
@@ -30,6 +31,9 @@ public final class ActionHelper {
         return new WebDriverWait(getDriver(), Duration.ofSeconds(timeout));
     }
 
+    public static List<WebElement> findElements(By locator) {
+        return getWait().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
+    }
 
     public static void click(By locator) {
         WebElement element = getWait().until(ExpectedConditions.elementToBeClickable(locator));

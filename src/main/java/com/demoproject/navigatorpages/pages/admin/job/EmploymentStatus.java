@@ -1,6 +1,6 @@
 package com.demoproject.navigatorpages.pages.admin.job;
 
-import com.demoproject.navigatorpages.pages.admin.job.jobtitles.AddEmploymentStatus;
+import com.demoproject.navigatorpages.pages.admin.job.employmentstatus.AddEmploymentStatus;
 
 
 public class EmploymentStatus extends BaseJobPage<EmploymentStatus> {

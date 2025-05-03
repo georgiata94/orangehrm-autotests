@@ -1,6 +1,6 @@
 package com.demoproject.navigatorpages.pages.admin.job;
 
-import com.demoproject.navigatorpages.pages.admin.job.jobtitles.AddWorkShift;
+import com.demoproject.navigatorpages.pages.admin.job.workshifts.AddWorkShift;
 
 public class WorkShifts extends BaseJobPage<WorkShifts> {
 

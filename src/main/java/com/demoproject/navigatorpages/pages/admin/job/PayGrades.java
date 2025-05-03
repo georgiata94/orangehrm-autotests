@@ -1,6 +1,6 @@
 package com.demoproject.navigatorpages.pages.admin.job;
 
-import com.demoproject.navigatorpages.pages.admin.job.jobtitles.AddPayGrade;
+import com.demoproject.navigatorpages.pages.admin.job.paygrades.AddPayGrade;
 
 public class PayGrades extends BaseJobPage<PayGrades> {
 
