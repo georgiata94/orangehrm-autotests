@@ -1,6 +1,6 @@
 package com.demoproject.tests;
 
-import com.demoproject.utils.Navigator;
+import com.demoproject.navigatorpages.Navigator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.Test;
