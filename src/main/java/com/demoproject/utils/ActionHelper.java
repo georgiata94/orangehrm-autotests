@@ -8,6 +8,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -156,4 +157,67 @@ public final class ActionHelper {
         return currentUrl.contains(expectedPartialUrl);
     }
 
+    public static void switchToWindowByIndex(int windowIndex) {
+        try {
+            String currentWindow = getDriver().getWindowHandle();
+            List<String> windows = new ArrayList<>(getDriver().getWindowHandles());
+
+            if (windowIndex >= 0 && windowIndex < windows.size()) {
+                String targetWindow = windows.get(windowIndex);
+                if (!currentWindow.equals(targetWindow)) {
+                    getDriver().switchTo().window(targetWindow);
+                    logger.info("Switched to window with index: {}", windowIndex);
+                }
+            } else {
+                throw new IndexOutOfBoundsException("Window index " + windowIndex + " is out of bounds. Total windows: " + windows.size());
+            }
+        } catch (Exception e) {
+            logger.error("Failed to switch to window by index {}: {}", windowIndex, e.getMessage());
+            throw e;
+        }
+    }
+
+    public static void switchToNewestWindow() {
+        List<String> windows = new ArrayList<>(getDriver().getWindowHandles());
+        getDriver().switchTo().window(windows.getLast());
+        logger.info("Switched to the newest window");
+    }
+
+    public static void closeWindowByIndex(int windowIndex) {
+        List<String> windows = new ArrayList<>(getDriver().getWindowHandles());
+        if (windowIndex >= 0 && windowIndex < windows.size()) {
+            getDriver().switchTo().window(windows.get(windowIndex));
+            getDriver().close();
+            logger.info("Closed window with index: {}", windowIndex);
+        }
+    }
+
+    public static void switchToDefaultWindow() {
+        List<String> windows = new ArrayList<>(getDriver().getWindowHandles());
+        if (!windows.isEmpty()) {
+            getDriver().switchTo().window(windows.getFirst());
+            logger.info("Switched back to the default window");
+        }
+    }
+
+    public static void switchToIframe(By iframeLocator) {
+        try {
+            WebElement iframe = getWait().until(ExpectedConditions.visibilityOfElementLocated(iframeLocator));
+            getDriver().switchTo().frame(iframe);
+            logger.info("Switched to iframe located by: {}", iframeLocator);
+        } catch (Exception e) {
+            logger.error("Failed to switch to iframe: {}", e.getMessage());
+            throw e;
+        }
+    }
+
+    public static void switchToDefaultContent() {
+        try {
+            getDriver().switchTo().defaultContent();
+            logger.info("Returned to default content");
+        } catch (Exception e) {
+            logger.error("Failed to switch to default content: {}", e.getMessage());
+            throw e;
+        }
+    }
 }

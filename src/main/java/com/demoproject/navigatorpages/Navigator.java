@@ -11,7 +11,6 @@ public class Navigator {
 
     private static Navigator instance;
     private final WebDriver driver;
-    private boolean isLoggedIn = false;
     protected final Logger logger = LogManager.getLogger(getClass());
 
     private Navigator(WebDriver driver) {
@@ -21,26 +20,29 @@ public class Navigator {
     public static Navigator getInstance() {
         if (instance == null) {
             instance = new Navigator(MyWebDriverManager.getDriver());
+            instance.logger.info("Navigator instance created.");
         }
         return instance;
     }
 
-    public BasePage getOrange() {
-        if (!isLoggedIn) {
+    public BasePage getOrange(boolean shouldLogin) {
+        if (shouldLogin) {
+            logger.info("Login requested with default credentials.");
             LoginPage loginPage = new LoginPage(driver);
-            BasePage basePage = loginPage.login();
-            isLoggedIn = true;
-            return basePage;
+            BasePage page = loginPage.login();
+            logger.info("Login completed using default credentials.");
+            return page;
         } else {
-            logger.info("You are already logged in.");
+            logger.info("Returning BasePage without login.");
             return new BasePage(driver);
         }
     }
 
-    public BasePage getOrange(boolean performNavigation) {
-        if (!performNavigation) {
-            return new BasePage(driver);
-        }
-        return getOrange();
+    public BasePage getOrange(String username, String password) {
+        logger.info("Login requested with provided credentials for user: {}", username);
+        LoginPage loginPage = new LoginPage(driver);
+        BasePage page = loginPage.login(username, password);
+        logger.info("Login completed for user: {}", username);
+        return page;
     }
 }

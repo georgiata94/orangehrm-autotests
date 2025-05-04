@@ -1,17 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="WARN">
     <Appenders>
+
         <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+            <PatternLayout>
+                <Pattern>%d{ISO8601} [%t] %-5p %c{1} - %m%n</Pattern>
+            </PatternLayout>
         </Console>
+
+
+        <File name="File" fileName="logs/app.log" append="false">
+            <PatternLayout>
+                <Pattern>%d{ISO8601} [%t] %-5p %c{1} - %m%n</Pattern>
+            </PatternLayout>
+        </File>
     </Appenders>
 
     <Loggers>
+
         <Root level="info">
             <AppenderRef ref="Console"/>
+            <AppenderRef ref="File"/>
         </Root>
-        <Logger name="com.demoproject" level="debug" additivity="false">
+
+
+        <Logger name="com.demoproject.navigatorpages" level="debug" additivity="false">
             <AppenderRef ref="Console"/>
+            <AppenderRef ref="File"/>
         </Logger>
+
+        <Logger name="com.demoproject.tests" level="debug" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="File"/>
+        </Logger>
+
+
+        <Logger name="com.demoproject.tests.AddNewShiftTest" level="debug" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="File"/>
+        </Logger>
+
+
     </Loggers>
 </Configuration>

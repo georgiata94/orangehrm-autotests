@@ -26,7 +26,7 @@ public class CreateNewUserTest extends BaseTest {
 
         log.info("Create new employee");
 
-        Navigator.getInstance().getOrange()
+        Navigator.getInstance().getOrange(true)
                 .getPIM(true)
                 .getAddEmployee(true)
                 .fillFirstName(employeeName)
@@ -36,7 +36,7 @@ public class CreateNewUserTest extends BaseTest {
 
         log.info("Create new user");
 
-        Navigator.getInstance().getOrange()
+        Navigator.getInstance().getOrange(false)
                 .openNavBar()
                 .getAdmin(true)
                 .getUserManagement(true)

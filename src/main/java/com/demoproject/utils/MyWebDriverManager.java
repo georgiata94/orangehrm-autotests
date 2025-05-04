@@ -40,7 +40,7 @@ public class MyWebDriverManager {
     public static void quitDriver() {
         if (driverThreadLocal.get() != null) {
             driverThreadLocal.get().quit();
-            driverThreadLocal.remove(); // важно!
+            driverThreadLocal.remove();
         }
     }
 }

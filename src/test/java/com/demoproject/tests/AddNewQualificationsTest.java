@@ -14,7 +14,7 @@ public class AddNewQualificationsTest extends BaseTest{
 
         log.info("Check the skill count before adding new skill.");
 
-        int resultBeforeCreate = Navigator.getInstance().getOrange()
+        int resultBeforeCreate = Navigator.getInstance().getOrange(true)
                 .getAdmin(true)
                 .getQualifications(true)
                 .getSkills(true)
@@ -22,7 +22,7 @@ public class AddNewQualificationsTest extends BaseTest{
 
         log.info("Create new skill");
 
-        Navigator.getInstance().getOrange()
+        Navigator.getInstance().getOrange(false)
                 .getAdmin(true)
                 .getQualifications(true)
                 .getSkills(true)
@@ -33,7 +33,7 @@ public class AddNewQualificationsTest extends BaseTest{
 
         log.info("Check the skill count after creation.");
 
-        int resultAfterCreate = Navigator.getInstance().getOrange()
+        int resultAfterCreate = Navigator.getInstance().getOrange(false)
                 .getAdmin(true)
                 .getQualifications(true)
                 .getSkills(true)

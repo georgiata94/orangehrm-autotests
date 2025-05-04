@@ -1,9 +1,9 @@
 package com.demoproject.navigatorpages.pages.admin.qualifications.licenses;
 
-import com.demoproject.navigatorpages.pages.admin.qualifications.BaseAddPage;
+import com.demoproject.navigatorpages.pages.admin.qualifications.BaseAddQualificationPage;
 import com.demoproject.navigatorpages.pages.admin.qualifications.Licenses;
 
-public class AddLicenses extends BaseAddPage<AddLicenses> {
+public class AddLicenses extends BaseAddQualificationPage<AddLicenses> {
 
     @Override
     protected AddLicenses self() {

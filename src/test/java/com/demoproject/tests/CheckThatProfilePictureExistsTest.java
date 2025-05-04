@@ -14,7 +14,7 @@ public class CheckThatProfilePictureExistsTest extends BaseTest {
     @Test
     public void test() {
 
-        Navigator.getInstance().getOrange();
+        Navigator.getInstance().getOrange(true);
 
         boolean isProfilePictureExists = driver.findElement(By.xpath("//img[@alt='profile picture']")).isDisplayed();
         Assert.assertTrue(isProfilePictureExists);

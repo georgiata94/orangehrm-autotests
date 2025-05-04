@@ -21,29 +21,32 @@ public class BasePage {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(15));
         PageFactory.initElements(driver, this);
+        logger.info("BasePage initialized.");
     }
 
     private void navigateTo(String locatorKey) {
-        By locator = ButtonManager.get(locatorKey);
         ActionHelper.setDriver(driver);
+        By locator = ButtonManager.get(locatorKey);
         ActionHelper.waitForVisibility(locator);
         ActionHelper.click(locator);
-        logger.info("Navigated using locator: {}", locatorKey);
     }
 
     public LoginPage clickLogout() {
+        logger.info("Logging out...");
         ActionHelper.setDriver(driver);
         ActionHelper.click(ButtonManager.get("header.userdropdown.xpath"));
         ActionHelper.click(ButtonManager.get("header.logout.xpath"));
+        
         return new LoginPage(driver);
     }
 
     public BasePage openNavBar() {
         By searchInput = ButtonManager.get("navbar.search.input");
         if (!driver.findElement(searchInput).isDisplayed()) {
+            logger.info("Opening navigation bar.");
             ActionHelper.click(ButtonManager.get("navbar.toggle.button"));
         } else {
-            logger.info("Navigation bar is already opened.");
+            logger.info("Navigation bar already open.");
         }
         return this;
     }
@@ -51,69 +54,106 @@ public class BasePage {
     public void closeNavBar() {
         By searchInput = ButtonManager.get("navbar.search.input");
         if (driver.findElement(searchInput).isDisplayed()) {
+            logger.info("Closing navigation bar.");
             ActionHelper.click(ButtonManager.get("navbar.toggle.button"));
         } else {
-            logger.info("Navigation bar is already closed.");
+            logger.info("Navigation bar already closed.");
         }
     }
 
     public Dashboard getDashboard(boolean performNavigation) {
-        if (performNavigation) navigateTo("menu.dashboard.xpath");
+        if (performNavigation) {
+            logger.info("Navigating to Dashboard.");
+            navigateTo("menu.dashboard.xpath");
+        }
         return new Dashboard(driver);
     }
 
     public Admin getAdmin(boolean performNavigation) {
-        if (performNavigation) navigateTo("menu.admin.xpath");
+        if (performNavigation) {
+            logger.info("Navigating to Admin.");
+            navigateTo("menu.admin.xpath");
+        }
         return new Admin();
     }
 
     public Buzz getBuzz(boolean performNavigation) {
-        if (performNavigation) navigateTo("menu.buzz.xpath");
+        if (performNavigation) {
+            logger.info("Navigating to Buzz.");
+            navigateTo("menu.buzz.xpath");
+        }
         return new Buzz(driver);
     }
 
     public Claim getClaim(boolean performNavigation) {
-        if (performNavigation) navigateTo("menu.claim.xpath");
+        if (performNavigation) {
+            logger.info("Navigating to Claim.");
+            navigateTo("menu.claim.xpath");
+        }
         return new Claim(driver);
     }
 
     public Directory getDirectory(boolean performNavigation) {
-        if (performNavigation) navigateTo("menu.directory.xpath");
+        if (performNavigation) {
+            logger.info("Navigating to Directory.");
+            navigateTo("menu.directory.xpath");
+        }
         return new Directory(driver);
     }
 
     public Leave getLeave(boolean performNavigation) {
-        if (performNavigation) navigateTo("menu.leave.xpath");
+        if (performNavigation) {
+            logger.info("Navigating to Leave.");
+            navigateTo("menu.leave.xpath");
+        }
         return new Leave(driver);
     }
 
     public Maintenance getMaintenance(boolean performNavigation) {
-        if (performNavigation) navigateTo("menu.maintenance.xpath");
+        if (performNavigation) {
+            logger.info("Navigating to Maintenance.");
+            navigateTo("menu.maintenance.xpath");
+        }
         return new Maintenance(driver);
     }
 
     public MyInfo getMyInfo(boolean performNavigation) {
-        if (performNavigation) navigateTo("menu.myinfo.xpath");
+        if (performNavigation) {
+            logger.info("Navigating to MyInfo.");
+            navigateTo("menu.myinfo.xpath");
+        }
         return new MyInfo(driver);
     }
 
     public Performance getPerformance(boolean performNavigation) {
-        if (performNavigation) navigateTo("menu.performance.xpath");
+        if (performNavigation) {
+            logger.info("Navigating to Performance.");
+            navigateTo("menu.performance.xpath");
+        }
         return new Performance(driver);
     }
 
     public PIM getPIM(boolean performNavigation) {
-        if (performNavigation) navigateTo("menu.pim.xpath");
+        if (performNavigation) {
+            logger.info("Navigating to PIM.");
+            navigateTo("menu.pim.xpath");
+        }
         return new PIM();
     }
 
     public Recruitment getRecruitment(boolean performNavigation) {
-        if (performNavigation) navigateTo("menu.recruitment.xpath");
+        if (performNavigation) {
+            logger.info("Navigating to Recruitment.");
+            navigateTo("menu.recruitment.xpath");
+        }
         return new Recruitment(driver);
     }
 
     public Time getTime(boolean performNavigation) {
-        if (performNavigation) navigateTo("menu.time.xpath");
+        if (performNavigation) {
+            logger.info("Navigating to Time.");
+            navigateTo("menu.time.xpath");
+        }
         return new Time(driver);
     }
 }

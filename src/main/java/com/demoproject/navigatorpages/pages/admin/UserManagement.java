@@ -22,7 +22,7 @@ public class UserManagement {
             By locator = ButtonManager.get(key);
             ActionHelper.waitForVisibility(locator);
             ActionHelper.click(locator);
-            logger.info("Navigated to element: {}", key);
+            logger.info("Navigation performed.");
         }
         return pageSupplier.get();
     }

@@ -31,7 +31,7 @@ public class EditUserTest extends BaseTest{
 
         log.info("Create new employee");
 
-        Navigator.getInstance().getOrange()
+        Navigator.getInstance().getOrange(true)
                 .getPIM(true)
                 .getAddEmployee(true)
                 .fillFirstName(employeeName)
@@ -41,7 +41,7 @@ public class EditUserTest extends BaseTest{
 
         log.info("Create new user and edit it.");
 
-        Navigator.getInstance().getOrange()
+        Navigator.getInstance().getOrange(false)
                 .openNavBar()
                 .getAdmin(true)
                 .getUserManagement(true)
@@ -55,7 +55,7 @@ public class EditUserTest extends BaseTest{
                 .fillConfirmPasswordField("Random123")
                 .clickSaveButton();
 
-        Navigator.getInstance().getOrange()
+        Navigator.getInstance().getOrange(false)
                 .getAdmin(true)
                 .getUserManagement(true)
                 .getUsers(true)
@@ -67,7 +67,7 @@ public class EditUserTest extends BaseTest{
 
         log.info("Search for edited user.");
 
-        Navigator.getInstance().getOrange()
+        Navigator.getInstance().getOrange(false)
                 .getAdmin(true)
                 .getUserManagement(true)
                 .getUsers(true)
