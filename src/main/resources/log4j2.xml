@@ -4,16 +4,16 @@
 
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout>
-                <Pattern>%d{ISO8601} [%t] %-5p %c{1} - %m%n</Pattern>
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss} [%t] %-5p %-30.30c{1} - %m%n</Pattern>
             </PatternLayout>
         </Console>
 
-
         <File name="File" fileName="logs/app.log" append="false">
             <PatternLayout>
-                <Pattern>%d{ISO8601} [%t] %-5p %c{1} - %m%n</Pattern>
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss} [%t] %-5p %-30.30c{1} - %m%n</Pattern>
             </PatternLayout>
         </File>
+
     </Appenders>
 
     <Loggers>
@@ -22,7 +22,6 @@
             <AppenderRef ref="Console"/>
             <AppenderRef ref="File"/>
         </Root>
-
 
         <Logger name="com.demoproject.navigatorpages" level="debug" additivity="false">
             <AppenderRef ref="Console"/>
@@ -34,12 +33,10 @@
             <AppenderRef ref="File"/>
         </Logger>
 
-
         <Logger name="com.demoproject.tests.AddNewShiftTest" level="debug" additivity="false">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="File"/>
         </Logger>
-
 
     </Loggers>
 </Configuration>

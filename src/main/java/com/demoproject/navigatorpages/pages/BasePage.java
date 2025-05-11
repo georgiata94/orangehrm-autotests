@@ -32,13 +32,79 @@ public class BasePage {
     }
 
     public LoginPage clickLogout() {
-        logger.info("Logging out...");
+        logger.info("Attempting to log out...");
         ActionHelper.setDriver(driver);
-        ActionHelper.click(ButtonManager.get("header.userdropdown.xpath"));
-        ActionHelper.click(ButtonManager.get("header.logout.xpath"));
-        
+
+        By userDropdown = ButtonManager.get("header.userdropdown.xpath");
+        By logoutButton = ButtonManager.get("header.logout.xpath");
+
+        try {
+            ActionHelper.waitForVisibility(userDropdown);
+            ActionHelper.click(userDropdown);
+            logger.info("User dropdown clicked.");
+
+            ActionHelper.waitForVisibility(logoutButton);
+            ActionHelper.click(logoutButton);
+            logger.info("Logout button clicked. Logout successful.");
+        } catch (Exception e) {
+            logger.error("Logout failed: {}", e.getMessage(), e);
+            throw e;
+        }
+
         return new LoginPage(driver);
     }
+
+    public BasePage changePassword(String currentPassword, String newPassword) {
+        logger.info("Attempting to change the password...");
+        ActionHelper.setDriver(driver);
+
+        By userDropdown = ButtonManager.get("header.userdropdown.xpath");
+        By changePasswordButton = ButtonManager.get("header.changePassword.xpath");
+        By currentPasswordField = ButtonManager.get("common.input.generic.xpath", "Current Password");
+        By newPasswordField = ButtonManager.get("common.input.generic.xpath", "Password");
+        By confirmPasswordField = ButtonManager.get("common.input.generic.xpath", "Confirm Password");
+        By saveButton = ButtonManager.get("common.button.save.xpath");
+        By successToast = ButtonManager.get("common.toast.success.xpath");
+
+        try {
+            ActionHelper.waitForVisibility(userDropdown);
+            ActionHelper.click(userDropdown);
+            logger.info("User dropdown clicked.");
+
+            ActionHelper.waitForVisibility(changePasswordButton);
+            ActionHelper.click(changePasswordButton);
+            logger.info("Change password button clicked.");
+
+            logger.info("Filling in current password.");
+            ActionHelper.waitForVisibility(currentPasswordField);
+            ActionHelper.type(currentPasswordField, currentPassword);
+
+            logger.info("Filling in new password.");
+            ActionHelper.waitForVisibility(newPasswordField);
+            ActionHelper.type(newPasswordField, newPassword);
+
+            logger.info("Filling in confirm password.");
+            ActionHelper.waitForVisibility(confirmPasswordField);
+            ActionHelper.type(confirmPasswordField, newPassword);
+
+            logger.info("Clicking save button.");
+            ActionHelper.waitForVisibility(saveButton);
+            ActionHelper.click(saveButton);
+
+            logger.info("Waiting for success toast message.");
+            ActionHelper.waitForVisibility(successToast);
+
+            logger.info("✅ Password changed successfully.");
+
+        } catch (Exception e) {
+            logger.error("❌ Password change failed: {}", e.getMessage(), e);
+            throw e;
+        }
+
+        return this;
+    }
+
+
 
     public BasePage openNavBar() {
         By searchInput = ButtonManager.get("navbar.search.input");
@@ -122,7 +188,7 @@ public class BasePage {
             logger.info("Navigating to MyInfo.");
             navigateTo("menu.myinfo.xpath");
         }
-        return new MyInfo(driver);
+        return new MyInfo();
     }
 
     public Performance getPerformance(boolean performNavigation) {
