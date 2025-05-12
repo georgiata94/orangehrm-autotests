@@ -5,6 +5,8 @@ import com.demoproject.utils.ConfigReader;
 import com.demoproject.utils.MyWebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
@@ -12,6 +14,7 @@ import java.time.Duration;
 
 
 public abstract class BaseTest {
+    private static final Logger logger = LoggerFactory.getLogger(BaseTest.class);
     protected WebDriver driver;
     protected WebDriverWait wait;
     protected static final Object lock = new Object();
@@ -33,8 +36,19 @@ public abstract class BaseTest {
 
     @AfterMethod(alwaysRun = true)
     public void tearDown() {
-        if (driver != null) {
-            driver.manage().deleteAllCookies();
+        synchronized (lock) {
+            try {
+                logger.info("Cleaning up test...");
+                if (driver != null) {
+                    logger.debug("Deleting cookies...");
+                    driver.manage().deleteAllCookies();
+                }
+            } finally {
+                logger.debug("Quitting driver...");
+                MyWebDriverManager.quitDriver();
+                driver = null;
+                logger.info("Cleanup completed");
+            }
         }
     }
 }
