@@ -1,8 +1,10 @@
-<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
-<suite name="DemoProjectSuite">
-    <test name="AllTests">
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="DemoProjectSuite" verbose="1" parallel="false" thread-count="1" configfailurepolicy="continue">
+
+    <test name="AllTests" preserve-order="true">
         <packages>
             <package name="com.demoproject.tests"/>
         </packages>
     </test>
+
 </suite>

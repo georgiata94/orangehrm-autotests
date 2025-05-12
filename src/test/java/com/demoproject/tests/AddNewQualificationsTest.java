@@ -27,7 +27,7 @@ public class AddNewQualificationsTest extends BaseTest{
                 .getQualifications(true)
                 .getSkills(true)
                 .clickAddButton()
-                .fillField("Coding skill")
+                .fillField("Coding skill"+ new java.util.Random().nextInt(10000))
                 .fillDescriptionField("The best coder")
                 .clickSaveButton();
 
