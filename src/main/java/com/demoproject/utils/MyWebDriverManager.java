@@ -132,11 +132,10 @@ public final class MyWebDriverManager {
         }
     }
 
-    private static boolean isSessionActive(WebDriver driver) {
+    public static boolean isSessionActive(WebDriver driver) {
         try {
             if (driver == null) return false;
-            return ((RemoteWebDriver)driver).getSessionId() != null &&
-                    !driver.toString().contains("(null)");
+            return ((RemoteWebDriver)driver).getSessionId() != null;
         } catch (Exception e) {
             logger.debug("WebDriver session is not active: {}", e.getMessage());
             return false;
