@@ -1,6 +1,7 @@
 package com.demoproject.utils;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
+import io.github.bonigarcia.wdm.config.DriverManagerType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
@@ -8,86 +9,178 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.remote.RemoteWebDriver;
+
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
-public class MyWebDriverManager {
-
-    private static final ThreadLocal<WebDriver> driverThreadLocal = new ThreadLocal<>();
+public final class MyWebDriverManager {
     private static final Logger logger = LogManager.getLogger(MyWebDriverManager.class);
+    private static final ThreadLocal<WebDriver> driverThreadLocal = new ThreadLocal<>();
+    private static final Map<DriverManagerType, Boolean> driverSetupStatus = new ConcurrentHashMap<>();
 
-    public static WebDriver getDriver() {
-        if (driverThreadLocal.get() == null) {
-            try {
-                initDriver();
-            } catch (Exception e) {
-                logger.info("Error initializing WebDriver: {}", e.getMessage());
-                e.printStackTrace();
-                throw new RuntimeException("WebDriver initialization failed", e);
-            }
-        }
-        return driverThreadLocal.get();
+    private MyWebDriverManager() {
+
     }
 
-    private static void initDriver() {
-        String browser = ConfigReader.getProperty("browser").toLowerCase();
+    public static synchronized WebDriver getDriver() {
+        WebDriver driver = driverThreadLocal.get();
+
+        if (driver == null || !isSessionActive(driver)) {
+            quitDriver();
+            driver = initDriver();
+            driverThreadLocal.set(driver);
+        }
+
+        return driver;
+    }
+
+    private static WebDriver initDriver() {
+        String browserName = ConfigReader.getProperty("browser").toLowerCase();
         boolean headless = Boolean.parseBoolean(ConfigReader.getProperty("headless"));
-        int implicitWaitTimeout = Integer.parseInt(ConfigReader.getProperty("defaultTimeout"));
+        int implicitWait = Integer.parseInt(ConfigReader.getProperty("defaultTimeout"));
+
+        DriverManagerType driverType;
+        WebDriver driver;
 
         try {
-            switch (browser) {
+            switch (browserName) {
                 case "chrome":
-                    WebDriverManager.chromedriver().setup();
+                    driverType = DriverManagerType.CHROME;
+                    setupDriverManager(driverType);
+
                     ChromeOptions chromeOptions = new ChromeOptions();
                     if (headless) {
-                        chromeOptions.addArguments("--headless", "--disable-gpu", "--window-size=1920x1080");
+                        chromeOptions.addArguments(
+                                "--disable-gpu",
+                                "--window-size=1920,1080",
+                                "--no-sandbox",
+                                "--disable-dev-shm-usage",
+                                "--headless=new"
+                        );
                     }
-                    driverThreadLocal.set(new ChromeDriver(chromeOptions));
+
+                    chromeOptions.addArguments(
+                            "--start-maximized",
+                            "--disable-infobars",
+                            "--disable-extensions",
+                            "--disable-notifications"
+                    );
+
+                    driver = new ChromeDriver(chromeOptions);
                     break;
+
                 case "firefox":
-                    WebDriverManager.firefoxdriver().setup();
+                    driverType = DriverManagerType.FIREFOX;
+                    setupDriverManager(driverType);
+
                     FirefoxOptions firefoxOptions = new FirefoxOptions();
                     if (headless) {
-                        firefoxOptions.addArguments("--headless");
+                        firefoxOptions.addArguments("--width=1920", "--height=1080", "--headless=new");
                     }
-                    driverThreadLocal.set(new FirefoxDriver(firefoxOptions));
+
+                    driver = new FirefoxDriver(firefoxOptions);
                     break;
+
                 default:
-                    throw new IllegalArgumentException("Unsupported browser: " + browser);
+                    throw new IllegalArgumentException("Unsupported browser: " + browserName);
             }
 
-            getDriver().manage().window().maximize();
 
-            getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(implicitWaitTimeout));
+            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(implicitWait));
+            driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
+            driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(30));
+
+            if (!headless) {
+                driver.manage().window().maximize();
+            }
+
+            logger.info("Initialized {} driver (headless: {})", browserName, headless);
+            return driver;
 
         } catch (Exception e) {
-            logger.info("Error while initializing the driver: {}", e.getMessage());
-            e.printStackTrace();
+            logger.error("Failed to initialize WebDriver: {}", e.getMessage(), e);
             throw new RuntimeException("WebDriver initialization failed", e);
         }
     }
 
+    private static synchronized void setupDriverManager(DriverManagerType driverType) {
+        if (!driverSetupStatus.getOrDefault(driverType, false)) {
+            WebDriverManager.getInstance(driverType).setup();
+            driverSetupStatus.put(driverType, true);
+            logger.debug("Setup WebDriverManager for {}", driverType);
+        }
+    }
+
     public static void quitDriver() {
-        if (driverThreadLocal.get() != null) {
+        WebDriver driver = driverThreadLocal.get();
+        if (driver != null) {
             try {
-                driverThreadLocal.get().quit();
+                driver.quit();
+                logger.debug("WebDriver quit successfully");
             } catch (Exception e) {
-                logger.info("Error while quitting WebDriver: {}", e.getMessage());
+                logger.warn("Error while quitting WebDriver: {}", e.getMessage());
             } finally {
                 driverThreadLocal.remove();
+                logger.info("WebDriver removed from ThreadLocal");
             }
         }
     }
 
-    public static void setProxy(String proxy) {
-        WebDriver driver = getDriver();
-        if (driver instanceof ChromeDriver) {
-            ChromeOptions options = new ChromeOptions();
-            options.addArguments("--proxy-server=" + proxy);
-            driver = new ChromeDriver(options);
-        } else if (driver instanceof FirefoxDriver) {
-            FirefoxOptions options = new FirefoxOptions();
-            options.addArguments("-proxy-server=" + proxy);
-            driver = new FirefoxDriver(options);
+    private static boolean isSessionActive(WebDriver driver) {
+        try {
+            if (driver instanceof RemoteWebDriver) {
+                return ((RemoteWebDriver) driver).getSessionId() != null;
+            }
+            // For local drivers, try to get window handles
+            driver.getWindowHandles();
+            return true;
+        } catch (Exception e) {
+            logger.debug("WebDriver session is not active: {}", e.getMessage());
+            return false;
+        }
+    }
+
+    public static void setProxy(String proxyAddress) {
+        if (proxyAddress == null || proxyAddress.isEmpty()) {
+            throw new IllegalArgumentException("Proxy address cannot be null or empty");
+        }
+
+        WebDriver currentDriver = driverThreadLocal.get();
+        if (currentDriver != null) {
+            throw new IllegalStateException("Cannot set proxy on an already initialized driver");
+        }
+
+        String browser = ConfigReader.getProperty("browser").toLowerCase();
+        Map<String, String> proxySettings = new HashMap<>();
+        proxySettings.put("httpProxy", proxyAddress);
+        proxySettings.put("sslProxy", proxyAddress);
+
+        try {
+            switch (browser) {
+                case "chrome":
+                    ChromeOptions chromeOptions = new ChromeOptions();
+                    chromeOptions.setCapability("proxy", proxySettings);
+                    WebDriverManager.chromedriver().setup();
+                    driverThreadLocal.set(new ChromeDriver(chromeOptions));
+                    break;
+
+                case "firefox":
+                    FirefoxOptions firefoxOptions = new FirefoxOptions();
+                    firefoxOptions.setCapability("proxy", proxySettings);
+                    WebDriverManager.firefoxdriver().setup();
+                    driverThreadLocal.set(new FirefoxDriver(firefoxOptions));
+                    break;
+
+                default:
+                    throw new UnsupportedOperationException("Proxy setup not supported for browser: " + browser);
+            }
+            logger.info("Proxy configured: {}", proxyAddress);
+        } catch (Exception e) {
+            logger.error("Failed to configure proxy: {}", e.getMessage(), e);
+            throw new RuntimeException("Proxy configuration failed", e);
         }
     }
 }

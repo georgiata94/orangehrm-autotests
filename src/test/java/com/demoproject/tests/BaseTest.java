@@ -15,15 +15,20 @@ public abstract class BaseTest {
 
     @BeforeMethod
     public void setUp() {
+        MyWebDriverManager.quitDriver();
         driver = MyWebDriverManager.getDriver();
         ActionHelper.setDriver(driver);
         wait = new WebDriverWait(driver, Duration.ofSeconds(Integer.parseInt(ConfigReader.getProperty("defaultTimeout"))));
+        driver.manage().window().maximize();
     }
 
-    @AfterMethod
+    @AfterMethod(alwaysRun = true)
     public void tearDown() {
-
-        if (driver != null) {
+        try {
+            if (driver != null) {
+                driver.manage().deleteAllCookies();
+            }
+        } finally {
             MyWebDriverManager.quitDriver();
         }
     }
