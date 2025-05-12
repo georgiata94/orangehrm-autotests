@@ -1,5 +1,5 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-<suite name="DemoProjectSuite" verbose="1" parallel="false" thread-count="1" configfailurepolicy="continue">
+<suite name="DemoProjectSuite" verbose="1" parallel="false" thread-count="1" configfailurepolicy="continue" time-out="180000">
 
     <test name="AllTests" preserve-order="true">
         <packages>

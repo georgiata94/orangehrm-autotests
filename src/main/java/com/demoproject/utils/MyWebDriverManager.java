@@ -118,25 +118,25 @@ public final class MyWebDriverManager {
         WebDriver driver = driverThreadLocal.get();
         if (driver != null) {
             try {
+                try {
+                    driver.close();
+                } catch (Exception e) {
+                    logger.warn("Error closing windows: {}", e.getMessage());
+                }
                 driver.quit();
-                logger.debug("WebDriver quit successfully");
             } catch (Exception e) {
-                logger.warn("Error while quitting WebDriver: {}", e.getMessage());
+                logger.error("Error quitting driver: {}", e.getMessage());
             } finally {
                 driverThreadLocal.remove();
-                logger.info("WebDriver removed from ThreadLocal");
             }
         }
     }
 
     private static boolean isSessionActive(WebDriver driver) {
         try {
-            if (driver instanceof RemoteWebDriver) {
-                return ((RemoteWebDriver) driver).getSessionId() != null;
-            }
-            // For local drivers, try to get window handles
-            driver.getWindowHandles();
-            return true;
+            if (driver == null) return false;
+            return ((RemoteWebDriver)driver).getSessionId() != null &&
+                    !driver.toString().contains("(null)");
         } catch (Exception e) {
             logger.debug("WebDriver session is not active: {}", e.getMessage());
             return false;
