@@ -47,6 +47,8 @@ public abstract class BaseTest {
         synchronized (lock) {
             try {
                 if (ITestResult.FAILURE == result.getStatus()) {
+                    String html = driver.getPageSource();
+                    logger.info("HTML when failed:\n{}", html);
                     captureScreenshot(result.getMethod().getMethodName());
                 }
                 logger.info("Cleaning up test...");
