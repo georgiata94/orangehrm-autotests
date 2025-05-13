@@ -19,29 +19,18 @@ public class BasePage {
     protected final Logger logger = LogManager.getLogger(getClass());
 
     public BasePage(WebDriver driver) {
-        this.driver = driver;
-        ensureDriverIsActive();
-        ActionHelper.setDriver(driver);
+        this.driver = MyWebDriverManager.getDriver();
+        if (this.driver == null) {
+            throw new IllegalStateException("WebDriver is not initialized!");
+        }
+
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(15));
         PageFactory.initElements(driver, this);
         logger.info("BasePage initialized.");
     }
 
-    private void ensureDriverIsActive() {
-        logger.debug("Checking if WebDriver session is active...");
-        if (driver == null || !MyWebDriverManager.isSessionActive(driver)) {
-            logger.info("WebDriver session is not active. Reinitializing driver...");
-            MyWebDriverManager.quitDriver();
-            driver = MyWebDriverManager.getDriver();
-            ActionHelper.setDriver(driver);
-            logger.info("New WebDriver session initialized.");
-        } else {
-            logger.debug("WebDriver session is active.");
-        }
-    }
 
     private void navigateTo(String locatorKey) {
-        ActionHelper.setDriver(driver);
         By locator = ButtonManager.get(locatorKey);
         ActionHelper.waitForVisibility(locator);
         ActionHelper.click(locator);
@@ -49,7 +38,6 @@ public class BasePage {
 
     public LoginPage clickLogout() {
         logger.info("Attempting to log out...");
-        ActionHelper.setDriver(driver);
 
         By userDropdown = ButtonManager.get("header.userdropdown.xpath");
         By logoutButton = ButtonManager.get("header.logout.xpath");
@@ -72,7 +60,6 @@ public class BasePage {
 
     public BasePage changePassword(String currentPassword, String newPassword) {
         logger.info("Attempting to change the password...");
-        ActionHelper.setDriver(driver);
 
         By userDropdown = ButtonManager.get("header.userdropdown.xpath");
         By changePasswordButton = ButtonManager.get("header.changePassword.xpath");

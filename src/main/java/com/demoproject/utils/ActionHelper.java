@@ -14,17 +14,12 @@ import java.util.Objects;
 
 public final class ActionHelper {
 
-    private static final ThreadLocal<WebDriver> driverThreadLocal = new ThreadLocal<>();
     private static final Logger logger = LogManager.getLogger(ActionHelper.class);
 
     private ActionHelper() {}
 
-    public static void setDriver(WebDriver driver) {
-        driverThreadLocal.set(driver);
-    }
-
     private static WebDriver getDriver() {
-        return driverThreadLocal.get();
+        return MyWebDriverManager.getDriver();
     }
 
     private static WebDriverWait getWait() {

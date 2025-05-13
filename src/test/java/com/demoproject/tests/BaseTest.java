@@ -23,54 +23,63 @@ import java.util.Date;
 
 public abstract class BaseTest {
     private static final Logger logger = LoggerFactory.getLogger(BaseTest.class);
-    protected WebDriver driver;
     protected WebDriverWait wait;
-    protected static final Object lock = new Object();
 
-    @BeforeMethod
+    protected WebDriver getDriver() {
+        return MyWebDriverManager.getDriver();
+    }
+
+    @BeforeMethod(alwaysRun = true)
     public void setUp() {
-        synchronized (lock) {
-            if (driver == null || !MyWebDriverManager.isSessionActive(driver)) {
-                MyWebDriverManager.quitDriver();
-                driver = MyWebDriverManager.getDriver();
-            }
-            ActionHelper.setDriver(driver);
-            wait = new WebDriverWait(driver, Duration.ofSeconds(30));
-            if (!Boolean.parseBoolean(ConfigReader.getProperty("headless"))) {
-                driver.manage().window().maximize();
-            }
+
+        wait = new WebDriverWait(getDriver(), Duration.ofSeconds(30));
+        if (!Boolean.parseBoolean(ConfigReader.getProperty("headless"))) {
+            getDriver().manage().window().maximize();
         }
+
+        logger.info("New session is started.");
     }
 
     @AfterMethod(alwaysRun = true)
     public void tearDown(ITestResult result) {
-        synchronized (lock) {
-            try {
-                if (ITestResult.FAILURE == result.getStatus()) {
-                    String html = driver.getPageSource();
-                    logger.info("HTML when failed:\n{}", html);
-                    captureScreenshot(result.getMethod().getMethodName());
-                }
-                logger.info("Cleaning up test...");
-                if (driver != null) {
-                    logger.debug("Deleting cookies...");
-                    driver.manage().deleteAllCookies();
-                }
-            } finally {
-                logger.debug("Quitting driver...");
-                MyWebDriverManager.quitDriver();
-                driver = null;
-                logger.info("Cleanup completed");
+        WebDriver driver = null;
+        try {
+            if (result.getStatus() == ITestResult.FAILURE) {
+                captureFailureData(result);
             }
+        } catch (Exception e) {
+            logger.error("Error during teardown for {}: {}",
+                    result.getMethod().getMethodName(), e.getMessage());
+        } finally {
+
+            MyWebDriverManager.quitDriver();
+            logger.info("Driver is closed after test: {}", result.getMethod().getMethodName());
+        }
+    }
+
+    private void captureFailureData(ITestResult result) {
+        try {
+            String pageSource = getDriver().getPageSource();
+            logger.info("Page source on failure:\n{}", pageSource);
+             captureScreenshot(result.getName());
+        } catch (Exception e) {
+            logger.error("Failed to capture failure data: {}", e.getMessage());
         }
     }
 
     public void captureScreenshot(String methodName) {
+        WebDriver driver = MyWebDriverManager.getDriver();
         try {
             TakesScreenshot ts = (TakesScreenshot) driver;
             File source = ts.getScreenshotAs(OutputType.FILE);
             String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
             String screenshotName = "screenshot_" + methodName + "_" + timestamp + ".png";
+
+            File directory = new File("screenshots");
+            if (!directory.exists()) {
+                directory.mkdirs();
+            }
+
             File destination = new File("screenshots/" + screenshotName);
             FileUtils.copyFile(source, destination);
             logger.info("Screenshot taken: {}", screenshotName);
@@ -78,4 +87,5 @@ public abstract class BaseTest {
             logger.error("Failed to capture screenshot: ", e);
         }
     }
+
 }

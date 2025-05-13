@@ -28,8 +28,7 @@ public final class MyWebDriverManager {
     public static synchronized WebDriver getDriver() {
         WebDriver driver = driverThreadLocal.get();
 
-        if (driver == null || !isSessionActive(driver)) {
-            quitDriver();
+        if (driver == null) {
             driver = initDriver();
             driverThreadLocal.set(driver);
         }
@@ -118,16 +117,13 @@ public final class MyWebDriverManager {
         WebDriver driver = driverThreadLocal.get();
         if (driver != null) {
             try {
-                try {
-                    driver.close();
-                } catch (Exception e) {
-                    logger.warn("Error closing windows: {}", e.getMessage());
-                }
                 driver.quit();
+                logger.info("Driver quit successfully");
             } catch (Exception e) {
                 logger.error("Error quitting driver: {}", e.getMessage());
             } finally {
                 driverThreadLocal.remove();
+                logger.debug("ThreadLocal driver reference removed");
             }
         }
     }
