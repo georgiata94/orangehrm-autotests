@@ -2,6 +2,7 @@ package com.demoproject.navigatorpages.pages;
 
 import com.demoproject.utils.ActionHelper;
 import com.demoproject.utils.ButtonManager;
+import com.demoproject.utils.MyWebDriverManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
@@ -19,10 +20,24 @@ public class BasePage {
 
     public BasePage(WebDriver driver) {
         this.driver = driver;
+        ensureDriverIsActive();
         ActionHelper.setDriver(driver);
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(15));
         PageFactory.initElements(driver, this);
         logger.info("BasePage initialized.");
+    }
+
+    private void ensureDriverIsActive() {
+        logger.debug("Checking if WebDriver session is active...");
+        if (driver == null || !MyWebDriverManager.isSessionActive(driver)) {
+            logger.info("WebDriver session is not active. Reinitializing driver...");
+            MyWebDriverManager.quitDriver();
+            driver = MyWebDriverManager.getDriver();
+            ActionHelper.setDriver(driver);
+            logger.info("New WebDriver session initialized.");
+        } else {
+            logger.debug("WebDriver session is active.");
+        }
     }
 
     private void navigateTo(String locatorKey) {
