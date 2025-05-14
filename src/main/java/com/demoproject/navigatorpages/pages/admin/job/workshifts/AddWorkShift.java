@@ -51,33 +51,35 @@ public class AddWorkShift {
     }
 
     public WorkShifts clickSaveButton() {
+        logger.info("Clicking 'Save' button for Work Shift.");
+
         try {
-            logger.info("Clicking 'Save' button for Work Shift.");
             ActionHelper.click(ButtonManager.get("common.button.save.xpath"));
 
-            boolean isSuccessVisible = false;
             int attempts = 0;
-            while (!isSuccessVisible && attempts < 3) {
+            while (attempts < 3) {
                 try {
                     ActionHelper.waitForVisibility(ButtonManager.get("common.toast.success.xpath"));
-                    isSuccessVisible = true;
+                    logger.info("Success toast is visible.");
+                    return new WorkShifts();
                 } catch (Exception e) {
                     attempts++;
                     logger.warn("Success toast not visible. Retrying... attempt {}", attempts);
-                    Thread.sleep(1000);
+                    Thread.sleep(150);
                 }
             }
 
-            if (!isSuccessVisible) {
-                logger.error("Success toast message not visible after clicking 'Save'.");
-            }
+
+            String errorMessage = "Success toast message not visible after clicking 'Save'. Failing the test.";
+            logger.error(errorMessage);
+            throw new RuntimeException(errorMessage);
 
         } catch (Exception e) {
             logger.error("Error while clicking 'Save' button: {}", e.getMessage());
+            throw new RuntimeException("Failed to click 'Save' button or wait for success toast.", e);
         }
-
-        return new WorkShifts();
     }
+
 
     public WorkShifts clickCancelButton() {
         try {
