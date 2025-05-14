@@ -59,7 +59,7 @@ public class AddWorkShift {
             int attempts = 0;
             while (attempts < 3) {
                 try {
-                    ActionHelper.waitForVisibility(ButtonManager.get("common.toast.success.xpath"));
+                    ActionHelper.waitForVisibility(ButtonManager.get("common.button.add.xpath"));
                     logger.info("Success toast is visible.");
                     return new WorkShifts();
                 } catch (Exception e) {
