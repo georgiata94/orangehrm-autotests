@@ -57,7 +57,7 @@ public class AddWorkShift {
             ActionHelper.click(ButtonManager.get("common.button.save.xpath"));
             ActionHelper.waitForPageLoad();
             int attempts = 0;
-            while (attempts < 3) {
+            while (attempts < 4) {
                 try {
                     ActionHelper.waitForVisibility(ButtonManager.get("common.button.add.xpath"));
                     logger.info("Add button is visible.");
@@ -65,7 +65,7 @@ public class AddWorkShift {
                 } catch (Exception e) {
                     attempts++;
                     logger.warn("Add button not visible. Retrying... attempt {}", attempts);
-                    Thread.sleep(150);
+                    Thread.sleep(1000);
                 }
             }
 
