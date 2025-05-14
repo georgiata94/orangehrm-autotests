@@ -23,6 +23,7 @@ public class CreateNewUserTest extends BaseTest {
                 .toString();
 
         String employeeFullName = employeeName + " " + employeeName + " " + employeeName;
+        String employeeId = String.valueOf(1000 + new Random().nextInt(9000));
 
         log.info("Create new employee");
 
@@ -32,6 +33,7 @@ public class CreateNewUserTest extends BaseTest {
                 .fillFirstName(employeeName)
                 .fillMiddleName(employeeName)
                 .fillLastName(employeeName)
+                .fillEmployeeId(employeeId)
                 .clickSaveButton();
 
         log.info("Create new user");
