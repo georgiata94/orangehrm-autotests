@@ -23,7 +23,8 @@ public class AddNewShiftTest extends BaseTest {
                 .fillShiftName(shiftName)
                 .fillTimeFrom("03:00 AM")
                 .fillTimeTo("09:00 AM")
-                .clickSaveButton();
+                .clickSaveButton()
+                .validateWorkShift(shiftName);
 
         log.info("The test passed successfully.");
     }
