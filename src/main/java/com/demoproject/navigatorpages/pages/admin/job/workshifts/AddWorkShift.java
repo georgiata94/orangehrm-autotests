@@ -54,31 +54,28 @@ public class AddWorkShift {
         logger.info("Clicking 'Save' button for Work Shift.");
 
         try {
-            ActionHelper.click(ButtonManager.get("common.button.save.xpath"));
             ActionHelper.waitForPageLoad();
-            int attempts = 0;
-            while (attempts < 4) {
-                try {
-                    ActionHelper.waitForVisibility(ButtonManager.get("common.button.add.xpath"));
-                    logger.info("Add button is visible.");
-                    return new WorkShifts();
-                } catch (Exception e) {
-                    attempts++;
-                    logger.warn("Add button not visible. Retrying... attempt {}", attempts);
-                    Thread.sleep(1000);
-                }
+            ActionHelper.waitForVisibility(ButtonManager.get("common.button.save.xpath"));
+
+            ActionHelper.jsClick(ButtonManager.get("common.button.save.xpath"));
+            logger.info("'Save' button clicked.");
+
+            try {
+                ActionHelper.waitForVisibility(ButtonManager.get("common.button.add.xpath"));
+                logger.info("Add button is visible. Save successful.");
+                return new WorkShifts();
+            } catch (Exception e) {
+                logger.error("Add button not visible after clicking 'Save'.");
+                throw new RuntimeException("Add button not visible after clicking 'Save'.");
             }
-
-
-            String errorMessage = "Add button not visible after clicking 'Save'. Failing the test.";
-            logger.error(errorMessage);
-            throw new RuntimeException(errorMessage);
 
         } catch (Exception e) {
             logger.error("Error while clicking 'Save' button: {}", e.getMessage());
             throw new RuntimeException("Failed to click 'Save' button or wait for Add button.", e);
         }
     }
+
+
 
 
     public WorkShifts clickCancelButton() {

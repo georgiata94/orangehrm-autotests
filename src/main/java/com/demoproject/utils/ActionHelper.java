@@ -413,4 +413,18 @@ public final class ActionHelper {
             throw e;
         }
     }
+
+    public static void uploadFile(By locator, String filePath) {
+        try {
+            WebElement fileInput = getDriver().findElement(locator);
+
+            ((JavascriptExecutor) getDriver()).executeScript("arguments[0].style.display='block';", fileInput);
+            fileInput.sendKeys(filePath);
+
+            logger.info("Successfully uploaded file '{}' using hidden input with locator: {}", filePath, locator);
+        } catch (Exception e) {
+            logger.error("Failed to upload file '{}' using locator {}: {}", filePath, locator, e.getMessage());
+            throw new RuntimeException("File upload failed", e);
+        }
+    }
 }
