@@ -59,8 +59,6 @@ public abstract class BaseTest {
 
     private void captureFailureData(ITestResult result) {
         try {
-            String pageSource = getDriver().getPageSource();
-            logger.info("Page source on failure:\n{}", pageSource);
              captureScreenshot(result.getName());
         } catch (Exception e) {
             logger.error("Failed to capture failure data: {}", e.getMessage());

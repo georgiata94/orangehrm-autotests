@@ -19,7 +19,7 @@ public abstract class BaseJobPage<T extends BaseJobPage<T>> {
 
     @SuppressWarnings("unchecked")
     public T enableCheckBoxAll() {
-        By checkBoxAll = ButtonManager.get("common.checkbox.all.xpath");
+        By checkBoxAll = ButtonManager.get("common.checkbox.all.xpath","Username");
         toggleCheckbox(checkBoxAll, ActionHelper.CheckboxState.ENABLE);
         logger.info("Enabled 'Select All' checkbox.");
         return (T) this;
@@ -27,7 +27,7 @@ public abstract class BaseJobPage<T extends BaseJobPage<T>> {
 
     @SuppressWarnings("unchecked")
     public T disableCheckBoxAll() {
-        By checkBoxAll = ButtonManager.get("common.checkbox.all.xpath");
+        By checkBoxAll = ButtonManager.get("common.checkbox.all.xpath","Username");
         toggleCheckbox(checkBoxAll, ActionHelper.CheckboxState.DISABLE);
         logger.info("Disabled 'Select All' checkbox.");
         return (T) this;

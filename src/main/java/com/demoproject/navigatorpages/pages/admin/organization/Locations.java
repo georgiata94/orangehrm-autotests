@@ -56,12 +56,12 @@ public class Locations {
 
     public Locations enableCheckBoxAll() {
         logger.info("Enabling 'Select All' checkbox.");
-        return toggleCheckbox(ButtonManager.get("common.checkbox.all.xpath"), ActionHelper.CheckboxState.ENABLE);
+        return toggleCheckbox(ButtonManager.get("common.checkbox.all.xpath","Username"), ActionHelper.CheckboxState.ENABLE);
     }
 
     public Locations disableCheckBoxAll() {
         logger.info("Disabling 'Select All' checkbox.");
-        return toggleCheckbox(ButtonManager.get("common.checkbox.all.xpath"), ActionHelper.CheckboxState.DISABLE);
+        return toggleCheckbox(ButtonManager.get("common.checkbox.all.xpath","Username"), ActionHelper.CheckboxState.DISABLE);
     }
 
     public Locations enableCheckBoxByUserName(String userName) {

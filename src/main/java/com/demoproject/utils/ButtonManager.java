@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 
+import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Properties;
 import java.io.InputStream;
@@ -62,7 +63,6 @@ public class ButtonManager {
             throw new IllegalArgumentException("Locator key '" + locatorKey + "' not found");
         }
 
-
         logger.debug("[DEBUG] Pattern before: {}", pattern);
         logger.debug("[DEBUG] Arguments: {}", Arrays.toString(args));
 
@@ -70,7 +70,9 @@ public class ButtonManager {
 
         String formattedLocator = pattern;
         if (args != null && args.length > 0) {
-            formattedLocator = pattern.replace("'{0}'", "'" + args[0] + "'");
+            for (int i = 0; i < args.length; i++) {
+                formattedLocator = formattedLocator.replace("'{" + i + "}'", "'" + args[i] + "'");
+            }
         }
 
         logger.debug("[DEBUG] Formatted locator: {}", formattedLocator);

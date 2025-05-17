@@ -43,14 +43,14 @@ public abstract class BaseQualifications<T extends BaseQualifications<T>> {
 
     public T enableCheckBoxAll() {
         logger.info("Enabling 'Select All' checkbox.");
-        By checkBoxAll = ButtonManager.get("common.checkbox.all.xpath");
+        By checkBoxAll = ButtonManager.get("common.checkbox.all.xpath","Username");
         toggleCheckbox(checkBoxAll, ActionHelper.CheckboxState.ENABLE);
         return self();
     }
 
     public T disableCheckBoxAll() {
         logger.info("Disabling 'Select All' checkbox.");
-        By checkBoxAll = ButtonManager.get("common.checkbox.all.xpath");
+        By checkBoxAll = ButtonManager.get("common.checkbox.all.xpath","Username");
         toggleCheckbox(checkBoxAll, ActionHelper.CheckboxState.DISABLE);
         return self();
     }

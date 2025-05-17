@@ -75,12 +75,12 @@ public class Users {
 
     public Users enableCheckBoxAll() {
         logger.info("Enabling checkbox for all users.");
-        return toggleCheckbox(ButtonManager.get("common.checkbox.all.xpath"), ActionHelper.CheckboxState.ENABLE);
+        return toggleCheckbox(ButtonManager.get("common.checkbox.all.xpath","Username"), ActionHelper.CheckboxState.ENABLE);
     }
 
     public Users disableCheckBoxAll() {
         logger.info("Disabling checkbox for all users.");
-        return toggleCheckbox(ButtonManager.get("common.checkbox.all.xpath"), ActionHelper.CheckboxState.DISABLE);
+        return toggleCheckbox(ButtonManager.get("common.checkbox.all.xpath","Username"), ActionHelper.CheckboxState.DISABLE);
     }
 
     public Users enableCheckBoxByUserName(String userName) {

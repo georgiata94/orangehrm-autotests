@@ -210,8 +210,16 @@ public final class ActionHelper {
     }
 
     public static void actionClick(By locator) {
+
+        logger.info("Attempting action click on element with locator: {}", locator);
+
+        WebElement element = getWait().until(ExpectedConditions.presenceOfElementLocated(locator));
+
+        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView({block: 'center'});", element);
+
+
         try {
-            WebElement element = getWait().until(ExpectedConditions.elementToBeClickable(locator));
+            getWait().until(ExpectedConditions.elementToBeClickable(locator));
             new Actions(getDriver()).moveToElement(element).click().perform();
             logger.info("Performed action click on element with locator: {}", locator);
         } catch (ElementNotInteractableException e) {
@@ -228,7 +236,7 @@ public final class ActionHelper {
 
     public static void jsClick(By locator) {
         try {
-            WebElement element = getWait().until(ExpectedConditions.visibilityOfElementLocated(locator));
+            WebElement element = getWait().until(ExpectedConditions.presenceOfElementLocated(locator));
             ((JavascriptExecutor) getDriver()).executeScript("arguments[0].click();", element);
             logger.info("Performed JavaScript click on element with locator: {}", locator);
         } catch (NoSuchElementException e) {
@@ -236,6 +244,23 @@ public final class ActionHelper {
             throw e;
         } catch (Exception e) {
             logger.error("Unexpected error performing JavaScript click with locator {}: {}", locator, e.getMessage());
+            throw e;
+        }
+    }
+
+    public static void moveToElement(By locator) {
+        try {
+            WebElement element = getWait().until(ExpectedConditions.visibilityOfElementLocated(locator));
+            new Actions(getDriver()).moveToElement(element).perform();
+            logger.info("Successfully moved to element with locator: {}", locator);
+        } catch (TimeoutException e) {
+            logger.error("Timeout: Element not visible to move to. Locator: {}", locator, e);
+            throw e;
+        } catch (ElementNotInteractableException e) {
+            logger.error("Element not interactable during move. Locator: {}", locator, e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("Unexpected error during move to element. Locator: {}", locator, e);
             throw e;
         }
     }
@@ -283,11 +308,11 @@ public final class ActionHelper {
 
     public static void setCheckbox(By locator, boolean shouldBeChecked) {
         try {
-            WebElement checkbox = getWait().until(ExpectedConditions.elementToBeClickable(locator));
+            WebElement checkbox = getWait().until(ExpectedConditions.presenceOfElementLocated(locator));
             boolean isChecked = checkbox.isSelected();
 
             if (isChecked != shouldBeChecked) {
-                checkbox.click();
+                ActionHelper.jsClick(locator);
                 logger.info("Checkbox at {} set to {}", locator, shouldBeChecked ? "checked" : "unchecked");
             } else {
                 logger.info("Checkbox at {} already in desired state: {}", locator, shouldBeChecked ? "checked" : "unchecked");
