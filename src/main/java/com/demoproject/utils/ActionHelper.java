@@ -126,6 +126,19 @@ public final class ActionHelper {
         }
     }
 
+    public static void waitForInvisibility(By locator) {
+        try {
+            getWait().until(ExpectedConditions.invisibilityOfElementLocated(locator));
+            logger.info("Element with locator {} became invisible", locator);
+        } catch (TimeoutException e) {
+            logger.error("Timeout waiting for element to be invisible with locator: {}", locator);
+            throw e;
+        } catch (Exception e) {
+            logger.error("Unexpected error waiting for invisibility of element with locator {}: {}", locator, e.getMessage());
+            throw e;
+        }
+    }
+
     public static void waitForPresence(By locator) {
         try {
             getWait().until(ExpectedConditions.presenceOfElementLocated(locator));
@@ -234,17 +247,77 @@ public final class ActionHelper {
         }
     }
 
-    public static void jsClick(By locator) {
+    public static void waitForAnimations() {
         try {
-            WebElement element = getWait().until(ExpectedConditions.presenceOfElementLocated(locator));
-            ((JavascriptExecutor) getDriver()).executeScript("arguments[0].click();", element);
-            logger.info("Performed JavaScript click on element with locator: {}", locator);
-        } catch (NoSuchElementException e) {
-            logger.error("Element not found for JavaScript click with locator: {}", locator);
-            throw e;
+
+            Object jQueryResult = ((JavascriptExecutor) getDriver())
+                    .executeScript("return window.jQuery != undefined");
+
+            if (jQueryResult instanceof Boolean && (Boolean) jQueryResult) {
+                ((JavascriptExecutor) getDriver())
+                        .executeScript("return jQuery.active == 0");
+            }
+
+
+            ((JavascriptExecutor) getDriver()).executeScript(
+                    "const animations = document.getAnimations();" +
+                            "return Promise.all(animations.map(anim => anim.finished));"
+            );
         } catch (Exception e) {
-            logger.error("Unexpected error performing JavaScript click with locator {}: {}", locator, e.getMessage());
-            throw e;
+            logger.warn("Animation wait failed: {}", e.getMessage());
+        }
+    }
+
+
+    public static void jsClick(By locator) {
+        WebElement element = null;
+        try {
+            //  Wait for element with explicit visibility check
+            element = getWait().until(ExpectedConditions.visibilityOfElementLocated(locator));
+
+            //  Scroll to center of viewport (not just into view)
+            ((JavascriptExecutor) getDriver()).executeScript(
+                    "arguments[0].scrollIntoView({block: 'center', inline: 'center'});",
+                    element
+            );
+
+            //  Full event simulation with mouse interactions
+            ((JavascriptExecutor) getDriver()).executeScript(
+                    "const elem = arguments[0];" +
+                            "const rect = elem.getBoundingClientRect();" +
+                            "const x = rect.left + rect.width/2;" +
+                            "const y = rect.top + rect.height/2;" +
+
+                            // Simulate full mouse interaction sequence
+                            "const mouseOver = new MouseEvent('mouseover', {" +
+                            "   bubbles: true, clientX: x, clientY: y" +
+                            "});" +
+                            "elem.dispatchEvent(mouseOver);" +
+
+                            "const mouseDown = new MouseEvent('mousedown', {" +
+                            "   bubbles: true, clientX: x, clientY: y" +
+                            "});" +
+                            "elem.dispatchEvent(mouseDown);" +
+
+                            "setTimeout(() => {" +
+                            "   const mouseUp = new MouseEvent('mouseup', {" +
+                            "       bubbles: true, clientX: x, clientY: y" +
+                            "   });" +
+                            "   elem.dispatchEvent(mouseUp);" +
+
+                            "   const clickEvent = new MouseEvent('click', {" +
+                            "       bubbles: true, clientX: x, clientY: y" +
+                            "   });" +
+                            "   elem.dispatchEvent(clickEvent);" +
+                            "}, 100);"
+                    , element
+            );
+
+            logger.info("Triggered advanced click simulation for dropdown: {}", locator);
+
+        } catch (Exception e) {
+            logger.error("Advanced dropdown click failed: " + e.getMessage());
+            throw new RuntimeException("Failed to interact with dropdown option", e);
         }
     }
 

@@ -1,9 +1,11 @@
 package com.demoproject.navigatorpages.pages.pim;
 
+import com.demoproject.navigatorpages.pages.pim.employeelist.EditEmployeePage;
 import com.demoproject.utils.ActionHelper;
 import com.demoproject.utils.ButtonManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.testng.Assert;
 
 public class EmployeeList {
 
@@ -61,6 +63,41 @@ public class EmployeeList {
         }
 
         return this;
+    }
+
+
+    public EmployeeList fillEmployeeId(String employeeId){
+        logger.info(("Fill the Employee Id field."));
+        ActionHelper.waitForVisibility(ButtonManager.get("common.input.generic.xpath","Employee Id"));
+        ActionHelper.type(ButtonManager.get("common.input.generic.xpath","Employee Id"),employeeId);
+
+        return this;
+    }
+
+    public EmployeeList clickSearchButton(){
+        logger.info("Clic the search button.");
+        ActionHelper.click(ButtonManager.get("common.button.search.xpath"));
+
+        return this;
+    }
+
+    public EditEmployeePage editFirstFoundEmployee(){
+
+        logger.info("Click edit button");
+        ActionHelper.click(ButtonManager.get("pim.employeeList.editButton"));
+
+        return new EditEmployeePage();
+    }
+
+    public void validateRecordExists(String record){
+
+        logger.info("Validate records.");
+
+        ActionHelper.waitForVisibility(ButtonManager.get("common.records.found.xpath"));
+        String actualRecord = ActionHelper.getText(ButtonManager.get("common.records.found.xpath"));
+
+        Assert.assertEquals(record,actualRecord);
+
     }
 
 
