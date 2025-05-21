@@ -272,8 +272,8 @@ public final class ActionHelper {
     public static void jsClick(By locator) {
         WebElement element = null;
         try {
-            //  Wait for element with explicit visibility check
-            element = getWait().until(ExpectedConditions.visibilityOfElementLocated(locator));
+
+            element = getWait().until(ExpectedConditions.presenceOfElementLocated(locator));
 
             //  Scroll to center of viewport (not just into view)
             ((JavascriptExecutor) getDriver()).executeScript(

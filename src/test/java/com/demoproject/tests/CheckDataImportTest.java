@@ -9,6 +9,7 @@ import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.time.Duration;
 import java.util.List;
 
 public class CheckDataImportTest extends BaseTest {
@@ -56,6 +57,8 @@ public class CheckDataImportTest extends BaseTest {
 
         logger.info("Verifying imported employee data in the table...");
 
+        Duration originalWait = getDriver().manage().timeouts().getImplicitWaitTimeout();
+
         int totalRows = getDriver().findElements(By.xpath("//div[@class='oxd-table-card']")).size();
         int employeeIndex = 0;
         boolean adminFoundAndSkipped = false;
@@ -64,9 +67,9 @@ public class CheckDataImportTest extends BaseTest {
             logger.info("Processing row {}", row);
 
             if (!adminFoundAndSkipped) {
-
+                getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(0));
                 List<WebElement> adminCheckboxes = getDriver().findElements(
-                        By.xpath("//div[@class='oxd-table-card-cell-hidden']"));
+                        By.xpath("//div[@class='oxd-table-card']["+row+"]//div[@class='oxd-table-card-cell-hidden']"));
 
                 if (!adminCheckboxes.isEmpty()) {
                     logger.info("Skipping admin at row {}", row);
@@ -97,6 +100,7 @@ public class CheckDataImportTest extends BaseTest {
             Assert.fail(String.format("Only %d out of %d employees were checked. Missing employees in table.",
                     employeeIndex, employees.length));
         }
+        getDriver().manage().timeouts().implicitlyWait(originalWait);
 
         logger.info("All employee records matched successfully.");
     }
