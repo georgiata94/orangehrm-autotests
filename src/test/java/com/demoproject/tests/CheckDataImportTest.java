@@ -103,5 +103,6 @@ public class CheckDataImportTest extends BaseTest {
         getDriver().manage().timeouts().implicitlyWait(originalWait);
 
         logger.info("All employee records matched successfully.");
+        logger.info("The test passed successfully.");
     }
 }

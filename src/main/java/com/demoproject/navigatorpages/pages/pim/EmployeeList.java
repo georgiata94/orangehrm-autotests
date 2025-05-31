@@ -75,9 +75,16 @@ public class EmployeeList {
     }
 
     public EmployeeList clickSearchButton(){
-        logger.info("Clic the search button.");
+        logger.info("Click the search button.");
         ActionHelper.click(ButtonManager.get("common.button.search.xpath"));
 
+        return this;
+    }
+
+
+    public EmployeeList clickResetButton(){
+        logger.info("Click the reset button.");
+        ActionHelper.cdpClick(ButtonManager.get("common.button.reset.xpath"));
         return this;
     }
 

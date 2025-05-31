@@ -3,14 +3,14 @@ package com.demoproject.utils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.*;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public final class ActionHelper {
 
@@ -221,6 +221,51 @@ public final class ActionHelper {
             throw e;
         }
     }
+
+    public static void cdpClick(By buttonLocator) {
+        try {
+            logger.info("➡️ Looking for element: {}", buttonLocator);
+            WebElement button = getDriver().findElement(buttonLocator);
+
+            Point location = button.getLocation();
+            Dimension size = button.getSize();
+            int centerX = location.getX() + size.getWidth() / 2;
+            int centerY = location.getY() + size.getHeight() / 2;
+
+            logger.info("📍 Element found at ({}, {}), size: {}x{}", location.getX(), location.getY(), size.getWidth(), size.getHeight());
+            logger.info("🎯 Calculated center of element: x={}, y={}", centerX, centerY);
+
+            Map<String, Object> paramsPress = new HashMap<>();
+            paramsPress.put("type", "mousePressed");
+            paramsPress.put("x", centerX);
+            paramsPress.put("y", centerY);
+            paramsPress.put("button", "left");
+            paramsPress.put("clickCount", 1);
+
+            Map<String, Object> paramsRelease = new HashMap<>();
+            paramsRelease.put("type", "mouseReleased");
+            paramsRelease.put("x", centerX);
+            paramsRelease.put("y", centerY);
+            paramsRelease.put("button", "left");
+            paramsRelease.put("clickCount", 1);
+
+            logger.info("🖱️ Sending 'mousePressed' CDP command...");
+            ((ChromeDriver) getDriver()).executeCdpCommand("Input.dispatchMouseEvent", paramsPress);
+
+            logger.info("🖱️ Sending 'mouseReleased' CDP command...");
+            ((ChromeDriver) getDriver()).executeCdpCommand("Input.dispatchMouseEvent", paramsRelease);
+
+            logger.info("✅ CDP click successfully performed on {}", buttonLocator);
+
+        } catch (NoSuchElementException e) {
+            logger.error("❌ Element not found: {}", buttonLocator, e);
+        } catch (WebDriverException e) {
+            logger.error("❌ WebDriver error during CDP click", e);
+        } catch (Exception e) {
+            logger.error("❌ Unexpected error during CDP click", e);
+        }
+    }
+
 
     public static void actionClick(By locator) {
 
