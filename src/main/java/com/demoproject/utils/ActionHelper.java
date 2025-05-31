@@ -222,47 +222,52 @@ public final class ActionHelper {
         }
     }
 
-    public static void cdpClick(By buttonLocator) {
+
+
+    public static void cdpClick(By locator) {
         try {
-            logger.info("➡️ Looking for element: {}", buttonLocator);
-            WebElement button = getDriver().findElement(buttonLocator);
+            WebElement button = getDriver().findElement(locator);
 
-            Point location = button.getLocation();
-            Dimension size = button.getSize();
-            int centerX = location.getX() + size.getWidth() / 2;
-            int centerY = location.getY() + size.getHeight() / 2;
+            logger.info("Scrolling to element...");
+            ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView({block: 'center'});", button);
 
-            logger.info("📍 Element found at ({}, {}), size: {}x{}", location.getX(), location.getY(), size.getWidth(), size.getHeight());
-            logger.info("🎯 Calculated center of element: x={}, y={}", centerX, centerY);
 
-            Map<String, Object> paramsPress = new HashMap<>();
-            paramsPress.put("type", "mousePressed");
-            paramsPress.put("x", centerX);
-            paramsPress.put("y", centerY);
-            paramsPress.put("button", "left");
-            paramsPress.put("clickCount", 1);
+            logger.info("Getting accurate screen coordinates of the element...");
+            Map<String, Number> coords = (Map<String, Number>) ((JavascriptExecutor) getDriver())
+                    .executeScript("const rect = arguments[0].getBoundingClientRect(); return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };", button);
 
-            Map<String, Object> paramsRelease = new HashMap<>();
-            paramsRelease.put("type", "mouseReleased");
-            paramsRelease.put("x", centerX);
-            paramsRelease.put("y", centerY);
-            paramsRelease.put("button", "left");
-            paramsRelease.put("clickCount", 1);
+            assert coords != null;
+            int x = coords.get("x").intValue();
+            int y = coords.get("y").intValue();
+            logger.debug("Calculated click coordinates: x={}, y={}", x, y);
 
-            logger.info("🖱️ Sending 'mousePressed' CDP command...");
-            ((ChromeDriver) getDriver()).executeCdpCommand("Input.dispatchMouseEvent", paramsPress);
+            Map<String, Object> press = Map.of(
+                    "type", "mousePressed",
+                    "x", x,
+                    "y", y,
+                    "button", "left",
+                    "clickCount", 1
+            );
 
-            logger.info("🖱️ Sending 'mouseReleased' CDP command...");
-            ((ChromeDriver) getDriver()).executeCdpCommand("Input.dispatchMouseEvent", paramsRelease);
+            Map<String, Object> release = Map.of(
+                    "type", "mouseReleased",
+                    "x", x,
+                    "y", y,
+                    "button", "left",
+                    "clickCount", 1
+            );
 
-            logger.info("✅ CDP click successfully performed on {}", buttonLocator);
+            logger.info("Sending CDP mousePressed event...");
+            ((ChromeDriver) getDriver()).executeCdpCommand("Input.dispatchMouseEvent", press);
 
-        } catch (NoSuchElementException e) {
-            logger.error("❌ Element not found: {}", buttonLocator, e);
-        } catch (WebDriverException e) {
-            logger.error("❌ WebDriver error during CDP click", e);
+            logger.info("Sending CDP mouseReleased event...");
+            ((ChromeDriver) getDriver()).executeCdpCommand("Input.dispatchMouseEvent", release);
+
+            logger.info("CDP click completed successfully.");
+
         } catch (Exception e) {
-            logger.error("❌ Unexpected error during CDP click", e);
+            logger.error("CDP click failed: {}", e.getMessage(), e);
+            throw new RuntimeException("CDP click failed", e);
         }
     }
 

@@ -21,6 +21,9 @@ public class ResetButtonShouldClearSearchAndReloadTableTest extends BaseTest {
                 .getEmployeeList(true)
                 .clickSearchButton();
 
+        String resultsAfterFullSearch = ActionHelper.getText(ButtonManager.get("common.records.found.xpath"));
+        logger.info("🔎 Results after full search: {}", resultsAfterFullSearch);
+
         logger.info("📋 Extracting first employee ID from results...");
         String firstEmplId = ActionHelper.getText(By.xpath("(//div[@class='oxd-table-cell oxd-padding-cell'][2])[1]//div"));
         logger.debug("✅ First employee ID retrieved: {}", firstEmplId);
@@ -46,6 +49,9 @@ public class ResetButtonShouldClearSearchAndReloadTableTest extends BaseTest {
 
         logger.info("✅ Verifying that reset has changed the visible results...");
         Assert.assertNotSame(resultsBeforeReset, resultsAfterReset, "Reset button did not reload full data set");
+
+        logger.info("✅ Verifying that results after full search is the same as result after reset");
+        Assert.assertEquals(resultsAfterFullSearch, resultsAfterReset, "Results did not match.");
 
         logger.info("The test passed successfully.");
     }
